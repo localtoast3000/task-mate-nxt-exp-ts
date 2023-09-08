@@ -1,9 +1,9 @@
 {
-  "name": "node-monorepo-template-next-express-ts",
+  "name": "task-mate",
   "version": "1.0.0",
-  "description": "Monorepo template provided with Next.js and Express.js",
+  "description": "Task Mate monorepo",
   "repository": {
-    "url": "https://github.com/localtoast3000/node-monorepo-template-next-express-ts.git"
+    "url": "https://github.com/localtoast3000/task-mate-nxt-exp-ts.git"
   },
   "author": "Craig Chick",
   "private": true,

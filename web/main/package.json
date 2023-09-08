@@ -2,7 +2,7 @@
   "name": "web.main",
   "version": "1.0.0",
   "private": true,
-  "description": "Main Next.js Application for Monorepo template built with TypeScript",
+  "description": "Main Next.js Application for Task Mate built with TypeScript",
   "author": "Craig Chick",
   "scripts": {
     "dev": "next dev",

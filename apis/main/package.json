@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "main": "_init_.js",
-  "description": "Main express.js api for Monorepo template built with TypeScript",
+  "description": "Main express.js api for Task Mate built with TypeScript",
   "author": "Craig Chick",
   "scripts": {
     "build": "npx tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
