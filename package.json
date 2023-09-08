@@ -1,0 +1,29 @@
+{
+  "name": "node-monorepo-template-next-express-ts",
+  "version": "1.0.0",
+  "description": "Monorepo template provided with Next.js and Express.js",
+  "repository": {
+    "url": "https://github.com/localtoast3000/node-monorepo-template-next-express-ts.git"
+  },
+  "author": "Craig Chick",
+  "private": true,
+  "workspaces": [
+    "apis/*",
+    "web/*",
+    "shared/*",
+    "scripts/*"
+  ],
+  "scripts": {
+    "ui:components:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/components/page ./node_modules/shared.ui/components/graphics ./node_modules/shared.ui/components/buttons",
+    "ui:hooks:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/hooks/bowser ./node_modules/shared.ui/hooks/events",
+    "ui:meta:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/meta",
+    "gen-exports": "yarn ui:components:gen-exports && yarn ui:hooks:gen-exports",
+    "api:main": "yarn workspace api.main",
+    "web:main": "yarn workspace web.main",
+    "web:main:dev": "nodemon --watch ./shared/ui/tailwind.config.js --exec yarn web:main dev"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "nodemon": "^3.0.1"
+  }
+}
