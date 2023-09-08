@@ -1,0 +1,10 @@
+.datePicker {
+}
+.datePicker :global .MuiTouchRipple-root {
+  display: none;
+}
+
+.dateDisplay {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}

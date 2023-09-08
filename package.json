@@ -14,7 +14,7 @@
     "scripts/*"
   ],
   "scripts": {
-    "ui:components:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/components/page ./node_modules/shared.ui/components/graphics ./node_modules/shared.ui/components/buttons",
+    "ui:components:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/components/page ./node_modules/shared.ui/components/graphics",
     "ui:hooks:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/hooks/bowser ./node_modules/shared.ui/hooks/events",
     "ui:meta:gen-exports": "ts-node scripts/exports-generator ./node_modules/shared.ui/meta",
     "gen-exports": "yarn ui:components:gen-exports && yarn ui:hooks:gen-exports",

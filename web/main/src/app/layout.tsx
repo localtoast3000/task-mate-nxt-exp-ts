@@ -1,11 +1,12 @@
 import 'shared.ui/css/global.css';
 import { Metadata } from 'next';
 import { sharedMetaOptions, SharedMeta } from 'shared.ui/meta/exports';
+import { TasksContextProvider } from '@/context/tasks';
 
 export const metadata: Metadata = {
   ...sharedMetaOptions,
-  title: 'Monorepo Template',
-  description: 'Main site for Monorepo Template',
+  title: 'Task Mate',
+  description: 'Main site for Task Mate',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,7 +15,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <SharedMeta />
       </head>
-      <body>{children}</body>
+      <TasksContextProvider>
+        <body>{children}</body>
+      </TasksContextProvider>
     </html>
   );
 }

@@ -15,15 +15,18 @@ module.exports = (paths) => {
         {
           dark: {
             ...daisyuiTheme['[data-theme=dark]'],
-            'base-100': '#111827',
             'base-content': '#ffffff',
             primary: '#4C35DE',
             secondary: '#DF3473',
-            '--third': '#ee6f6f',
             accent: '#008B61',
             info: '#c47bfd',
             neutral: '#8D92A1',
             'neutral-content': '#ffffff',
+          },
+          light: {
+            ...daisyuiTheme['[data-theme=light]'],
+            'base-content': 'black',
+            'neutral-content': 'black',
           },
         },
       ],
