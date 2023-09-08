@@ -1,2 +1,2 @@
-<h1>Node.js Monorepo template</h1>
-<p>Provided with Next.js and Express.js</p>
+<h1>Task Mate</h1>
+<p>monorepo</p>
