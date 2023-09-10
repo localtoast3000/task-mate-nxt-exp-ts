@@ -1,9 +1,0 @@
-export { default as Form } from './src/elements/form';
-export { default as Input } from './src/elements/input';
-export { default as PhoneInput } from './src/elements/phone-input';
-export { default as Checkbox } from './src/elements/checkbox';
-export { default as ButtonsSelector } from './src/elements/buttons-selector';
-export { default as DatePicker } from './src/elements/date-picker';
-export { default as SubmitBtn } from './src/elements/submit-btn';
-export { default as validators } from './src/util/form-validators';
-export { default as sanitizers } from './src/util/sanitizers';

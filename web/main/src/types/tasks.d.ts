@@ -1,5 +1,5 @@
 export interface Task {
   id: string;
-  ends: string;
+  ends: Date;
   task: string;
 }
