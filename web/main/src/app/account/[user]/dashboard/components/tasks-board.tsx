@@ -1,8 +1,18 @@
 import { Task } from '@/types/tasks';
 import { useTasks } from '@/context/tasks';
-import { format } from 'date-fns';
-import { DateTimePicker } from 'shared.ui/components/form/exports';
+import { DateTimePicker, DateLib } from 'shared.ui/components/form/exports';
 import { useState, useRef } from 'react';
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  getDaysInMonth,
+  parse,
+  isBefore,
+  isSameMonth,
+  isAfter,
+} from 'date-fns';
 
 interface TaskCardProps extends Task {}
 
@@ -65,19 +75,45 @@ function EditTaskModal({
   id: string;
   getRef: (ref: any) => HTMLDivElement | null;
 }) {
+  const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+
   return (
     <dialog
       ref={(ref) => getRef(ref)}
       id={`task-modal-${id}`}
       className='modal '>
-      <div className='modal-box w-11/12 max-w-5xl'>
-        <DateTimePicker />
-        <div className='modal-action'>
+      <div className='modal-box w-11/12 max-w-5xl h-full flex flex-col'>
+        <div className='self-start ml-auto'>
           <form method='dialog'>
             <button className='btn btn-ghost'>Close</button>
           </form>
         </div>
+        <div>
+          <DateTimePicker
+            dateLib={dateFnsMethods()}
+            selectedDate={date}
+            onChange={(newDate) => setDate(newDate)}
+            disablePastDates={true}
+            yearRange={[new Date().getFullYear(), 2100]}
+            startWeekOnMonday
+          />
+        </div>
+        <div className=''></div>
       </div>
     </dialog>
   );
+}
+
+function dateFnsMethods() {
+  return {
+    format,
+    addMonths,
+    subMonths,
+    startOfMonth,
+    getDaysInMonth,
+    parse,
+    isBefore,
+    isSameMonth,
+    isAfter,
+  } as DateLib;
 }
