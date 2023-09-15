@@ -12,7 +12,7 @@ export interface DateLib {
   isAfter: (date1: Date, date2: Date) => boolean;
 }
 
-export interface DatePickerProps {
+export interface DateInputProps {
   selectedDate: string;
   onChange: (date: string) => void;
   dateLib: DateLib;
@@ -34,7 +34,7 @@ export interface HeaderProps {
   setShowYearGrid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface DaysProps {
+export interface CalendarViewProps {
   daysInMonth?: number;
   displayedMonth: Date;
   onChange: (date: string) => void;
@@ -43,17 +43,10 @@ export interface DaysProps {
   maxDate?: Date;
   dateLib: DateLib;
   today: Date;
-}
-
-export interface DayNamesProps {
   daysOfWeek: string[];
 }
 
-export interface EmptyDaysProps {
-  days: number[];
-}
-
-export interface YearPickerProps {
+export interface YearViewProps {
   displayedMonth: Date;
   setDisplayedMonth: React.Dispatch<React.SetStateAction<Date>>;
   yearRange: number[];

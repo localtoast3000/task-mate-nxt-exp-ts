@@ -12,15 +12,6 @@ interface FormProps<TFieldValues extends FieldValues> {
   [key: string]: any;
 }
 
-interface InputProps {
-  register: any;
-  name: string;
-  rules?: object;
-  controlled?: boolean;
-  error?: any;
-  [key: string]: any;
-}
-
 type MapChildrenProps = {
   ignore?: boolean;
   wrapper?: boolean;

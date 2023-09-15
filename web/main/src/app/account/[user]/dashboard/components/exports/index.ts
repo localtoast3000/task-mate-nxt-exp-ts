@@ -1,1 +1,1 @@
-export { default as TaskBoard } from '../tasks-board';
+export { default as TasksBoard } from '../tasks-board';

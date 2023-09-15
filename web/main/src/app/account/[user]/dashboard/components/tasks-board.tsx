@@ -16,7 +16,7 @@ import {
 
 interface TaskCardProps extends Task {}
 
-export default function TaskBoard() {
+export default function TasksBoard() {
   const { tasks } = useTasks();
 
   return (
