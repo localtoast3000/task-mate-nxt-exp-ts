@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, SVGProps } from 'react';
-import { FieldProps } from './field-props';
+import { InputFieldProps } from '../types';
 
-interface InputProps extends FieldProps {
+interface InputProps extends InputFieldProps {
   classNames?: {
     container?: string;
     error?: string;

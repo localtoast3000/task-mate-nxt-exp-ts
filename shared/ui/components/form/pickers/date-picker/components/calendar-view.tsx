@@ -1,4 +1,4 @@
-import { CalendarViewProps } from '../../types';
+import { CalendarViewProps } from '../../../fields/date-input/types';
 
 export default function CalendarView({
   displayedMonth,

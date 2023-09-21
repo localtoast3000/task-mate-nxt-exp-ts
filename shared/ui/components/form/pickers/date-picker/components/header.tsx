@@ -1,4 +1,4 @@
-import { HeaderProps } from '../../types';
+import { HeaderProps } from '../../../fields/date-input/types';
 
 export default function Header({
   displayedMonth,

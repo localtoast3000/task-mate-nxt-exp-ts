@@ -1,6 +1,6 @@
 import { Task } from '@/types/tasks';
 import { useTasks } from '@/context/tasks';
-import { DateTimePicker, DateLib } from 'shared.ui/components/form/exports';
+import { DateInput, DateLib, Form } from 'shared.ui/components/form/exports';
 import { useState, useRef } from 'react';
 import {
   format,
@@ -75,8 +75,6 @@ function EditTaskModal({
   id: string;
   getRef: (ref: any) => HTMLDivElement | null;
 }) {
-  const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-
   return (
     <dialog
       ref={(ref) => getRef(ref)}
@@ -88,16 +86,20 @@ function EditTaskModal({
             <button className='btn btn-ghost'>Close</button>
           </form>
         </div>
-        <div>
-          <DateTimePicker
+        <Form>
+          <DateInput
+            name='task-end-date'
             dateLib={dateFnsMethods()}
-            selectedDate={date}
             onChange={(newDate) => setDate(newDate)}
-            disablePastDates={true}
             yearRange={[new Date().getFullYear(), 2100]}
-            startWeekOnMonday
+            picker
+            pickerProps={{
+              selectedDate: new Date(),
+              disablePastDates: true,
+              startWeekOnMonday: true,
+            }}
           />
-        </div>
+        </Form>
         <div className=''></div>
       </div>
     </dialog>

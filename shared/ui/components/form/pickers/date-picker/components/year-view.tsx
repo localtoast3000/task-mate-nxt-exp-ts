@@ -1,4 +1,4 @@
-import { YearViewProps } from '../../types';
+import { YearViewProps } from '../../../fields/date-input/types';
 
 export default function YearView({
   displayedMonth,

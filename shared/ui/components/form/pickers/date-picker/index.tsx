@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Header, CalendarView, YearView } from './components/exports';
-import { DateInputProps } from '../types';
+import { DatePickerProps } from './types';
 
 export default function DatePicker({
   disablePastDates = false,
@@ -8,10 +8,9 @@ export default function DatePicker({
   minDate,
   maxDate,
   yearRange,
-  selectedDate,
   onChange,
   dateLib,
-}: DateInputProps) {
+}: DatePickerProps) {
   const [displayedMonth, setDisplayedMonth] = useState(dateLib.startOfMonth(new Date()));
   const [showYearGrid, setShowYearGrid] = useState(false);
   const today = new Date();

@@ -1,26 +1,16 @@
 import React from 'react';
+import { DateLib } from '../../types';
 
-export interface DateLib {
-  format: (date: Date, formatString: string) => string;
-  parse: (dateString: string, formatString: string, referenceDate: Date | number) => Date;
-  startOfMonth: (date: Date) => Date;
-  getDaysInMonth: (date: Date) => number;
-  subMonths: (date: Date, amount: number) => Date;
-  addMonths: (date: Date, amount: number) => Date;
-  isBefore: (date1: Date, date2: Date) => boolean;
-  isSameMonth: (date1: Date, date2: Date) => boolean;
-  isAfter: (date1: Date, date2: Date) => boolean;
-}
-
-export interface DateInputProps {
-  selectedDate: string;
-  onChange: (date: string) => void;
+export interface DatePickerProps {
+  selectedDate: Date;
+  disablePastDates: boolean;
+  startWeekOnMonday: boolean;
+  minDate: Date;
+  maxDate: Date;
+  yearRange: number[];
+  selectedDate: Date;
+  onChange: () => void;
   dateLib: DateLib;
-  disablePastDates?: boolean;
-  startWeekOnMonday?: boolean;
-  minDate?: Date;
-  maxDate?: Date;
-  yearRange?: [number, number];
 }
 
 export interface HeaderProps {
