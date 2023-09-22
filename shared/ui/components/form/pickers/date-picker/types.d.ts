@@ -5,11 +5,11 @@ export interface DatePickerProps {
   selectedDate: Date;
   disablePastDates: boolean;
   startWeekOnMonday: boolean;
-  minDate: Date;
-  maxDate: Date;
+  minDate?: Date;
+  maxDate?: Date;
   yearRange: number[];
   selectedDate: Date;
-  onChange: () => void;
+  onChange?: () => void;
   dateLib: DateLib;
 }
 

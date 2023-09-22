@@ -86,19 +86,27 @@ function EditTaskModal({
             <button className='btn btn-ghost'>Close</button>
           </form>
         </div>
-        <Form>
+        <Form
+          onSubmit={({ values }: any) => {
+            console.log(values);
+          }}>
           <DateInput
             name='task-end-date'
             dateLib={dateFnsMethods()}
-            onChange={(newDate) => setDate(newDate)}
-            yearRange={[new Date().getFullYear(), 2100]}
             picker
             pickerProps={{
+              yearRange: [new Date().getFullYear(), 2100],
               selectedDate: new Date(),
               disablePastDates: true,
               startWeekOnMonday: true,
+              dateLib: dateFnsMethods(),
             }}
           />
+          <button
+            className='btn btn-success'
+            type='submit'>
+            Submit
+          </button>
         </Form>
         <div className=''></div>
       </div>
@@ -106,7 +114,7 @@ function EditTaskModal({
   );
 }
 
-function dateFnsMethods() {
+function dateFnsMethods(): DateLib {
   return {
     format,
     addMonths,
@@ -117,5 +125,5 @@ function dateFnsMethods() {
     isBefore,
     isSameMonth,
     isAfter,
-  } as DateLib;
+  };
 }

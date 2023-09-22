@@ -1,6 +1,6 @@
 import { Props, FieldError, UseFormRegister } from 'react-hook-form';
 
-export interface InputFieldProps extends HTMLInputElement {
+export interface InputFieldProps extends Partial<HTMLInputElement> {
   wrapper?: boolean;
   register?: UseFormRegister;
   name: string;
