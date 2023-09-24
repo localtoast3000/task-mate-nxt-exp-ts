@@ -4,7 +4,7 @@ import { DatePicker, DatePickerProps } from '../pickers/date-picker/exports';
 
 export interface DateInputProps extends Partial<InputFieldProps> {
   dateLib: DateLib;
-  onChange?: (val: any) => void;
+  onChange?: (date: Date) => void;
   onValueChange?: (val: any) => void;
   classNames?: {
     container?: string;
@@ -38,7 +38,7 @@ export default function DateInput({
 
   useEffect(() => {
     if (!value) return;
-    onChange(value);
+    onChange(new Date(value));
     onValueChange(value);
   }, [value]);
 
@@ -47,7 +47,6 @@ export default function DateInput({
       <input
         {...props}
         type='date'
-        s
         readOnly={picker ? true : false}
         value={value ? dateLib.format(new Date(), 'yyyy-MM-dd') : value}
         onClick={() => (picker ? setIsOpen(!isOpen) : null)}
@@ -58,7 +57,14 @@ export default function DateInput({
         className={`${classNames.error} text-error ${error?.message ? 'mt-[10px]' : ''}`}>
         {error?.message}
       </p>
-      {picker && isOpen ? <DatePicker {...pickerProps} /> : <></>}
+      {picker && isOpen ? (
+        <DatePicker
+          {...pickerProps}
+          onChange={(date) => setValue(date)}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

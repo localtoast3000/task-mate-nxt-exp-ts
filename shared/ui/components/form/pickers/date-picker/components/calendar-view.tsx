@@ -1,8 +1,8 @@
-import { CalendarViewProps } from '../../../fields/date-input/types';
+import { CalendarViewProps } from '../types';
 
 export default function CalendarView({
   displayedMonth,
-  onChange,
+  onChange = (date: Date) => {},
   disablePastDates,
   minDate,
   maxDate,
@@ -52,7 +52,7 @@ export default function CalendarView({
             } btn`}
             onClick={() => {
               if (!isDisabled) {
-                onChange(dateLib.format(thisDay, 'yyyy-MM-dd'));
+                onChange(thisDay);
               }
             }}>
             <p>{day}</p>

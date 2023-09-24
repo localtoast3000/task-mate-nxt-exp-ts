@@ -8,7 +8,7 @@ export default function DatePicker({
   minDate,
   maxDate,
   yearRange,
-  onChange,
+  onChange = () => {},
   dateLib,
 }: DatePickerProps) {
   const [displayedMonth, setDisplayedMonth] = useState(dateLib.startOfMonth(new Date()));
@@ -53,7 +53,7 @@ export default function DatePicker({
       ) : (
         <CalendarView
           displayedMonth={displayedMonth}
-          onChange={onChange}
+          onChange={(date) => onChange(date)}
           disablePastDates={disablePastDates}
           minDate={minDate}
           maxDate={maxDate}

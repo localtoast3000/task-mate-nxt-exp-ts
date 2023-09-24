@@ -9,7 +9,7 @@ export interface DatePickerProps {
   maxDate?: Date;
   yearRange: number[];
   selectedDate: Date;
-  onChange?: () => void;
+  onChange?: (date: Date) => void;
   dateLib: DateLib;
 }
 
@@ -27,7 +27,7 @@ export interface HeaderProps {
 export interface CalendarViewProps {
   daysInMonth?: number;
   displayedMonth: Date;
-  onChange: (date: string) => void;
+  onChange: (date: Date) => void;
   disablePastDates?: boolean;
   minDate?: Date;
   maxDate?: Date;
