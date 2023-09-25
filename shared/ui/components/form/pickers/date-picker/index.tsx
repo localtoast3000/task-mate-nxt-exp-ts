@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header, CalendarView, YearView } from './components/exports';
 import { DatePickerProps } from './types';
+import { DateTimeContextProvider } from './context';
 
 export default function DatePicker({
   disablePastDates = false,
@@ -31,37 +32,39 @@ export default function DatePicker({
     : Array.from({ length: 41 }, (_, i) => i + 1990); // Default if yearRange is not provided
 
   return (
-    <div className='absolute z-10 mt-2 border rounded w-72 p-4'>
-      <Header
-        displayedMonth={displayedMonth}
-        setDisplayedMonth={setDisplayedMonth}
-        disablePrev={disablePrev}
-        disableNext={disableNext}
-        dateLib={dateLib}
-        yearRange={customYearRange}
-        showYearGrid={showYearGrid}
-        setShowYearGrid={setShowYearGrid}
-      />
-
-      {showYearGrid ? (
-        <YearView
+    <DateTimeContextProvider>
+      <div className='absolute z-10 mt-2 border rounded w-72 p-4'>
+        <Header
           displayedMonth={displayedMonth}
           setDisplayedMonth={setDisplayedMonth}
+          disablePrev={disablePrev}
+          disableNext={disableNext}
+          dateLib={dateLib}
           yearRange={customYearRange}
+          showYearGrid={showYearGrid}
           setShowYearGrid={setShowYearGrid}
         />
-      ) : (
-        <CalendarView
-          displayedMonth={displayedMonth}
-          onChange={(date) => onChange(date)}
-          disablePastDates={disablePastDates}
-          minDate={minDate}
-          maxDate={maxDate}
-          dateLib={dateLib}
-          today={today}
-          daysOfWeek={daysOfWeek}
-        />
-      )}
-    </div>
+
+        {showYearGrid ? (
+          <YearView
+            displayedMonth={displayedMonth}
+            setDisplayedMonth={setDisplayedMonth}
+            yearRange={customYearRange}
+            setShowYearGrid={setShowYearGrid}
+          />
+        ) : (
+          <CalendarView
+            displayedMonth={displayedMonth}
+            onChange={(date) => onChange(date)}
+            disablePastDates={disablePastDates}
+            minDate={minDate}
+            maxDate={maxDate}
+            dateLib={dateLib}
+            today={today}
+            daysOfWeek={daysOfWeek}
+          />
+        )}
+      </div>
+    </DateTimeContextProvider>
   );
 }
