@@ -1,4 +1,5 @@
 import { CalendarViewProps } from '../types';
+import { useDateTime } from '../context';
 
 export default function CalendarView({
   displayedMonth,
@@ -6,12 +7,12 @@ export default function CalendarView({
   disablePastDates,
   minDate,
   maxDate,
-  dateLib,
   daysOfWeek,
   today,
 }: CalendarViewProps) {
-  const daysInMonth = dateLib.getDaysInMonth(displayedMonth);
-  const firstDayOfMonth = dateLib.startOfMonth(displayedMonth).getDay();
+  const { dateTime, conditions, getDaysInMonth, startOfMonth } = useDateTime();
+  const daysInMonth = getDaysInMonth(dateTime);
+  const firstDayOfMonth = startOfMonth(dateTime).getDay();
   const totalDays = 42; // 6 weeks * 7 days
   const numberOfEmptyDays = totalDays - daysInMonth - firstDayOfMonth;
 
@@ -37,9 +38,9 @@ export default function CalendarView({
           day
         );
         thisDay.setHours(0, 0, 0, 0);
-        const isPast = disablePastDates && dateLib.isBefore(thisDay, today);
-        const isBeforeMin = minDate && dateLib.isBefore(thisDay, minDate);
-        const isAfterMax = maxDate && dateLib.isAfter(thisDay, maxDate);
+        const isPast = disablePastDates && conditions.isBefore(thisDay, today);
+        const isBeforeMin = minDate && conditions.isBefore(thisDay, minDate);
+        const isAfterMax = maxDate && conditions.isAfter(thisDay, maxDate);
         const isDisabled = isPast || isBeforeMin || isAfterMax;
 
         return (

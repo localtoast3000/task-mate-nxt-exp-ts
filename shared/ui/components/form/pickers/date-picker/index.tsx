@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Header, CalendarView, YearView } from './components/exports';
 import { DatePickerProps } from './types';
-import { DateTimeContextProvider } from './context';
+import { DateTimeContextProvider, useDateTime } from './context';
 
 export default function DatePicker({ ...props }: DatePickerProps) {
   return (
@@ -19,6 +19,7 @@ function PickerContainer({
   yearRange,
   onChange = () => {},
 }: DatePickerProps) {
+  const { dateTime, startOfMonth, conditions } = useDateTime();
   const [displayedMonth, setDisplayedMonth] = useState(startOfMonth(new Date()));
   const [showYearGrid, setShowYearGrid] = useState(false);
   const today = new Date();
@@ -30,9 +31,9 @@ function PickerContainer({
     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   const disablePrev =
-    (disablePastDates && dateLib.isSameMonth(displayedMonth, today)) ||
-    (minDate && dateLib.isBefore(displayedMonth, minDate));
-  const disableNext = maxDate && dateLib.isAfter(displayedMonth, maxDate);
+    (disablePastDates && conditions.isSameMonth(dateTime, today)) ||
+    (minDate && conditions.isBefore(dateTime, minDate));
+  const disableNext = maxDate && conditions.isAfter(dateTime, maxDate);
 
   const customYearRange = yearRange
     ? Array.from({ length: yearRange[1] - yearRange[0] + 1 }, (_, i) => i + yearRange[0])

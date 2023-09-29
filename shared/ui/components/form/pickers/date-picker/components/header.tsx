@@ -1,14 +1,15 @@
-import { HeaderProps } from '../../../fields/date-input/types';
+import { HeaderProps } from '../types';
+import { useDateTime } from '../context';
 
 export default function Header({
   displayedMonth,
   setDisplayedMonth,
   disablePrev,
   disableNext,
-  dateLib,
   showYearGrid,
   setShowYearGrid,
 }: HeaderProps) {
+  const { dateTime, updateDateTime, format } = useDateTime();
   const toggleYearGrid = () => {
     setShowYearGrid(!showYearGrid);
   };
@@ -18,8 +19,8 @@ export default function Header({
       <button
         onClick={toggleYearGrid}
         className='flex items-center'>
-        <span className='mr-2'>{dateLib.format(displayedMonth, 'MMMM')}</span>
-        <span>{displayedMonth.getFullYear()}</span>
+        <span className='mr-2'>{format(displayedMonth, 'MMMM')}</span>
+        <span>{dateTime.getFullYear()}</span>
       </button>
 
       <div className='flex gap-[5px]'>
@@ -29,11 +30,7 @@ export default function Header({
               ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default'
               : ''
           }`}
-          onClick={() => {
-            if (!disablePrev) {
-              setDisplayedMonth(dateLib.subMonths(displayedMonth, 1));
-            }
-          }}>
+          onClick={() => !disablePrev && updateDateTime('add', { month: 1 })}>
           <svg
             height='10'
             width='10'
@@ -47,11 +44,7 @@ export default function Header({
               ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default'
               : ''
           }`}
-          onClick={() => {
-            if (!disableNext) {
-              setDisplayedMonth(dateLib.addMonths(displayedMonth, 1));
-            }
-          }}>
+          onClick={() => !disableNext && updateDateTime('sub', { month: 1 })}>
           <svg
             height='10'
             width='10'

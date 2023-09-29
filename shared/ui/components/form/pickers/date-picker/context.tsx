@@ -1,5 +1,17 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { addDays, addMonths, addYears, addHours, addMinutes, startOfMonth, isSameMonth, isBefore, isAfter } from 'date-fns';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import {
+  addDays,
+  addMonths,
+  addYears,
+  addHours,
+  addMinutes,
+  startOfMonth,
+  getDaysInMonth,
+  format,
+  isSameMonth,
+  isBefore,
+  isAfter,
+} from 'date-fns';
 
 interface DateTimeContextProps {
   dateTime: Date;
@@ -13,13 +25,16 @@ interface DateTimeContextProps {
       hours?: number;
       minutes?: number;
       milliseconds?: number;
-    };
-    utils: {
-      isAfter: (date:Date) =>  boolean,
-      isBefore: (date:Date) =>  boolean,
-      isSameMonth: (date:Date) =>  boolean
-    } 
+    }
   ) => void;
+  startOfMonth: (date: Date) => Date;
+  getDaysInMonth: (date: Date) => number;
+  format: (date: Date, format: string, options?: {}) => string;
+  conditions: {
+    isAfter: (date1: Date, date2: Date) => boolean;
+    isBefore: (date1: Date, date2: Date) => boolean;
+    isSameMonth: (date1: Date, date2: Date) => boolean;
+  };
 }
 
 const DateTimeContext = createContext<DateTimeContextProps | undefined>(undefined);
@@ -87,12 +102,14 @@ export function DateTimeContextProvider({ children }: { children: ReactNode }) {
           }
 
           setDateTime(newDate);
-          startOfMonth,
-          utils: {
-            isAfter,
-            isBefore,
-            isSameMonth
-          } 
+        },
+        format,
+        startOfMonth,
+        getDaysInMonth,
+        conditions: {
+          isAfter: (date: Date) => isAfter(dateTime, date),
+          isBefore: (date: Date) => isBefore(dateTime, date),
+          isSameMonth: (date: Date) => isSameMonth(dateTime, date),
         },
       }}>
       {children}
