@@ -10,7 +10,6 @@ export interface DatePickerProps {
   yearRange: number[];
   selectedDate: Date;
   onChange?: (date: Date) => void;
-  dateLib: DateLib;
 }
 
 export interface HeaderProps {
@@ -18,7 +17,6 @@ export interface HeaderProps {
   setDisplayedMonth: React.Dispatch<React.SetStateAction<Date>>;
   disablePrev: boolean | undefined;
   disableNext: boolean | undefined;
-  dateLib: DateLib;
   yearRange: number[];
   showYearGrid: boolean;
   setShowYearGrid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +29,6 @@ export interface CalendarViewProps {
   disablePastDates?: boolean;
   minDate?: Date;
   maxDate?: Date;
-  dateLib: DateLib;
   today: Date;
   daysOfWeek: string[];
 }

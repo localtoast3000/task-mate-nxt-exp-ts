@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { addDays, addMonths, addYears, addHours, addMinutes } from 'date-fns';
+import { addDays, addMonths, addYears, addHours, addMinutes, startOfMonth, isSameMonth, isBefore, isAfter } from 'date-fns';
 
 interface DateTimeContextProps {
   dateTime: Date;
@@ -13,7 +13,12 @@ interface DateTimeContextProps {
       hours?: number;
       minutes?: number;
       milliseconds?: number;
-    }
+    };
+    utils: {
+      isAfter: (date:Date) =>  boolean,
+      isBefore: (date:Date) =>  boolean,
+      isSameMonth: (date:Date) =>  boolean
+    } 
   ) => void;
 }
 
@@ -82,6 +87,12 @@ export function DateTimeContextProvider({ children }: { children: ReactNode }) {
           }
 
           setDateTime(newDate);
+          startOfMonth,
+          utils: {
+            isAfter,
+            isBefore,
+            isSameMonth
+          } 
         },
       }}>
       {children}
