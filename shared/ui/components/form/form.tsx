@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useForm, Controller, SubmitHandler, FieldValues } from 'react-hook-form';
 
-// Type Definitions
-
 interface FormProps<TFieldValues extends FieldValues> {
   defaultValues?: Partial<TFieldValues>;
   children: ReactNode;
@@ -21,8 +19,6 @@ type MapChildrenProps = {
   children?: ReactNode;
   [key: string]: any;
 };
-
-// Component
 
 const Form = React.forwardRef<HTMLFormElement, FormProps<any>>(
   (
@@ -95,7 +91,10 @@ const Form = React.forwardRef<HTMLFormElement, FormProps<any>>(
         {...props}
         ref={ref}
         noValidate={removeNativeErrors}
-        onSubmit={handleSubmit((values) => onSubmit({ values, errors }))}>
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit((values) => onSubmit({ values, errors }))(e);
+        }}>
         {React.Children.map(children, mapChildrenRecursively)}
       </form>
     );

@@ -1,7 +1,7 @@
 import { Task } from '@/types/tasks';
 import { useTasks } from '@/context/tasks';
 import { DateInput, DateLib, Form } from 'shared.ui/components/form/exports';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import {
   format,
   addMonths,
@@ -87,19 +87,19 @@ function EditTaskModal({
           </form>
         </div>
         <Form
+          defaultValues={{
+            'task-end-date': new Date(),
+          }}
           onSubmit={({ values }: any) => {
             console.log(values);
           }}>
           <DateInput
             name='task-end-date'
-            dateLib={dateFnsMethods()}
             picker
             pickerProps={{
-              yearRange: [new Date().getFullYear(), 2100],
-              selectedDate: new Date(),
+              yearRange: [new Date().getFullYear(), 2033],
               disablePastDates: true,
               startWeekOnMonday: true,
-              dateLib: dateFnsMethods(),
             }}
           />
           <button

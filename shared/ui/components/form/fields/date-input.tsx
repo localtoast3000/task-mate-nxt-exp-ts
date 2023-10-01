@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { InputFieldProps, DateLib } from '../types';
+import { InputFieldProps } from '../types';
 import { DatePicker, DatePickerProps } from '../pickers/date-picker/exports';
+import format from 'date-fns/format';
 
 export interface DateInputProps extends Partial<InputFieldProps> {
-  dateLib: DateLib;
   onChange?: (date: Date) => void;
   onValueChange?: (val: any) => void;
   classNames?: {
@@ -22,7 +22,6 @@ export default function DateInput({
   error,
   onChange = () => {},
   onValueChange = () => {},
-  dateLib,
   classNames = {
     container: '',
     error: '',
@@ -32,13 +31,12 @@ export default function DateInput({
   ...props
 }: DateInputProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState(
-    props?.defaultValue ? props?.defaultValue : new Date()
+  const [value, setValue] = useState<Date>(
+    props.defaultValue instanceof Date ? props.defaultValue : new Date()
   );
 
   useEffect(() => {
-    if (!value) return;
-    onChange(new Date(value));
+    onChange(value);
     onValueChange(value);
   }, [value]);
 
@@ -48,7 +46,7 @@ export default function DateInput({
         {...props}
         type='date'
         readOnly={picker ? true : false}
-        value={value ? dateLib.format(new Date(), 'yyyy-MM-dd') : value}
+        value={format(value, 'yyyy-MM-dd')}
         onClick={() => (picker ? setIsOpen(!isOpen) : null)}
         {...register(name, rules)}
         className='border rounded px-3 py-2 focus:outline-none focus:border-blue-500'

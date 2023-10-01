@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import {
   addDays,
   addMonths,
@@ -12,10 +12,13 @@ import {
   isBefore,
   isAfter,
 } from 'date-fns';
+import { DatePickerContextProps } from './types';
 
-interface DateTimeContextProps {
+interface DateTimeProps extends DatePickerContextProps {
   dateTime: Date;
+  view: string;
   setDateTime: (newDateTime: Date) => void;
+  setView: (view: string) => void;
   updateDateTime: (
     modifier: 'add' | 'sub',
     options: {
@@ -27,6 +30,7 @@ interface DateTimeContextProps {
       milliseconds?: number;
     }
   ) => void;
+  todaysDate: () => Date;
   startOfMonth: (date: Date) => Date;
   getDaysInMonth: (date: Date) => number;
   format: (date: Date, format: string, options?: {}) => string;
@@ -37,17 +41,28 @@ interface DateTimeContextProps {
   };
 }
 
-const DateTimeContext = createContext<DateTimeContextProps | undefined>(undefined);
+const DateTimeContext = createContext<DateTimeProps | undefined>(undefined);
 
-export function DateTimeContextProvider({ children }: { children: ReactNode }) {
+export function DateTimeContextProvider({
+  children,
+  onChange = (date: Date) => {},
+  ...props
+}: DatePickerContextProps) {
   const [dateTime, setDateTime] = useState(new Date());
+  const [view, setView] = useState<string>('calendar');
+
+  useEffect(() => {
+    onChange(dateTime);
+  }, [dateTime]);
 
   return (
     <DateTimeContext.Provider
       value={{
         dateTime,
+        view,
         setDateTime,
-        updateDateTime(modifier, options) {
+        setView,
+        updateDateTime: (modifier, options) => {
           const {
             day = 0,
             month = 0,
@@ -103,14 +118,20 @@ export function DateTimeContextProvider({ children }: { children: ReactNode }) {
 
           setDateTime(newDate);
         },
+        todaysDate: () => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return today;
+        },
         format,
         startOfMonth,
         getDaysInMonth,
         conditions: {
-          isAfter: (date: Date) => isAfter(dateTime, date),
-          isBefore: (date: Date) => isBefore(dateTime, date),
-          isSameMonth: (date: Date) => isSameMonth(dateTime, date),
+          isAfter: (date1, date2) => isAfter(date1, date2),
+          isBefore: (date1, date2) => isBefore(date1, date2),
+          isSameMonth: (date1, date2) => isSameMonth(date1, date2),
         },
+        ...props,
       }}>
       {children}
     </DateTimeContext.Provider>

@@ -1,27 +1,47 @@
-import { HeaderProps } from '../types';
 import { useDateTime } from '../context';
 
-export default function Header({
-  displayedMonth,
-  setDisplayedMonth,
-  disablePrev,
-  disableNext,
-  showYearGrid,
-  setShowYearGrid,
-}: HeaderProps) {
-  const { dateTime, updateDateTime, format } = useDateTime();
-  const toggleYearGrid = () => {
-    setShowYearGrid(!showYearGrid);
-  };
+export default function Header() {
+  const {
+    dateTime,
+    updateDateTime,
+    format,
+    minDate,
+    maxDate,
+    todaysDate,
+    conditions,
+    view,
+    setView,
+  } = useDateTime();
+
+  const previousMonth = new Date(dateTime.getFullYear(), dateTime.getMonth() - 1, 1);
+  const nextMonth = new Date(dateTime.getFullYear(), dateTime.getMonth() + 1, 1);
+  const currentMonth = new Date(todaysDate().getFullYear(), todaysDate().getMonth(), 1);
+
+  const disablePrev =
+    (minDate && conditions.isBefore(previousMonth, minDate)) ||
+    conditions.isBefore(previousMonth, currentMonth);
+
+  const disableNext = maxDate && conditions.isAfter(nextMonth, maxDate);
 
   return (
     <div className='flex justify-between pb-[20px]'>
-      <button
-        onClick={toggleYearGrid}
-        className='flex items-center'>
-        <span className='mr-2'>{format(displayedMonth, 'MMMM')}</span>
-        <span>{dateTime.getFullYear()}</span>
-      </button>
+      <div className='flex gap-[5px]'>
+        <button
+          onClick={() => {
+            view !== 'year' ? setView('year') : setView('calendar');
+          }}
+          className='flex items-center'>
+          <span className='mr-2'>{format(dateTime, 'MMMM')}</span>
+          <span>{dateTime.getFullYear()}</span>
+        </button>
+        <button
+          onClick={() => {
+            view !== 'time' ? setView('time') : setView('calendar');
+          }}
+          className='btn btn-ghost'>
+          {format(dateTime, 'HH:mm')}
+        </button>
+      </div>
 
       <div className='flex gap-[5px]'>
         <button
@@ -30,7 +50,7 @@ export default function Header({
               ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default'
               : ''
           }`}
-          onClick={() => !disablePrev && updateDateTime('add', { month: 1 })}>
+          onClick={() => !disablePrev && updateDateTime('sub', { month: 1 })}>
           <svg
             height='10'
             width='10'
@@ -44,7 +64,7 @@ export default function Header({
               ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default'
               : ''
           }`}
-          onClick={() => !disableNext && updateDateTime('sub', { month: 1 })}>
+          onClick={() => !disableNext && updateDateTime('add', { month: 1 })}>
           <svg
             height='10'
             width='10'
