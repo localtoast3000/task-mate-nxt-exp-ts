@@ -9,3 +9,5 @@ export interface DatePickerContextProps {
   onChange?: (date: Date) => void;
   children?: React.ReactNode;
 }
+
+export type ViewTypes = 'calendar' | 'year' | 'time';

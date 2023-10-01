@@ -79,7 +79,7 @@ function EditTaskModal({
     <dialog
       ref={(ref) => getRef(ref)}
       id={`task-modal-${id}`}
-      className='modal '>
+      className='modal'>
       <div className='modal-box w-11/12 max-w-5xl h-full flex flex-col'>
         <div className='self-start ml-auto'>
           <form method='dialog'>

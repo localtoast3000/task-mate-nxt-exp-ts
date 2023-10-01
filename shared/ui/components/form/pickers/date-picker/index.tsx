@@ -3,7 +3,7 @@ import { DatePickerContextProps } from './types';
 import { DateTimeContextProvider, useDateTime } from './context';
 
 export default function DatePicker({
-  onChange = (date: Date) => {},
+  onChange = () => {},
   ...props
 }: DatePickerContextProps) {
   return (

@@ -12,13 +12,13 @@ import {
   isBefore,
   isAfter,
 } from 'date-fns';
-import { DatePickerContextProps } from './types';
+import { DatePickerContextProps, ViewTypes } from './types';
 
 interface DateTimeProps extends DatePickerContextProps {
   dateTime: Date;
-  view: string;
+  view: ViewTypes;
   setDateTime: (newDateTime: Date) => void;
-  setView: (view: string) => void;
+  setView: (view: ViewTypes) => void;
   updateDateTime: (
     modifier: 'add' | 'sub',
     options: {
@@ -45,11 +45,11 @@ const DateTimeContext = createContext<DateTimeProps | undefined>(undefined);
 
 export function DateTimeContextProvider({
   children,
-  onChange = (date: Date) => {},
+  onChange = () => {},
   ...props
 }: DatePickerContextProps) {
   const [dateTime, setDateTime] = useState(new Date());
-  const [view, setView] = useState<string>('calendar');
+  const [view, setView] = useState<ViewTypes>('calendar');
 
   useEffect(() => {
     onChange(dateTime);
