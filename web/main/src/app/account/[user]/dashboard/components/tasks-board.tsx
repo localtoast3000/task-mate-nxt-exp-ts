@@ -1,18 +1,8 @@
 import { Task } from '@/types/tasks';
 import { useTasks } from '@/context/tasks';
-import { DateInput, DateLib, Form } from 'shared.ui/components/form/exports';
+import { Form, DateTimeInput } from 'shared.ui/components/form/exports';
 import { useRef } from 'react';
-import {
-  format,
-  addMonths,
-  subMonths,
-  startOfMonth,
-  getDaysInMonth,
-  parse,
-  isBefore,
-  isSameMonth,
-  isAfter,
-} from 'date-fns';
+import { format } from 'date-fns';
 
 interface TaskCardProps extends Task {}
 
@@ -93,7 +83,7 @@ function EditTaskModal({
           onSubmit={({ values }: any) => {
             console.log(values);
           }}>
-          <DateInput
+          <DateTimeInput
             name='task-end-date'
             picker
             pickerProps={{
@@ -112,18 +102,4 @@ function EditTaskModal({
       </div>
     </dialog>
   );
-}
-
-function dateFnsMethods(): DateLib {
-  return {
-    format,
-    addMonths,
-    subMonths,
-    startOfMonth,
-    getDaysInMonth,
-    parse,
-    isBefore,
-    isSameMonth,
-    isAfter,
-  };
 }

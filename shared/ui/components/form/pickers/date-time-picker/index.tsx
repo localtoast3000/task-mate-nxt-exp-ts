@@ -1,22 +1,22 @@
 import { Header, CalendarView, YearView, TimeView } from './components/exports';
-import { DatePickerContextProps } from './types';
-import { DateTimeContextProvider, useDateTime } from './context';
+import { DateTimePickerProps } from './types';
+import { DateTimePickerContextProvider, useDTPCxt } from './dtp-context';
 
-export default function DatePicker({
+export default function DateTimePicker({
   onChange = () => {},
   ...props
-}: DatePickerContextProps) {
+}: DateTimePickerProps) {
   return (
-    <DateTimeContextProvider
+    <DateTimePickerContextProvider
       {...props}
       onChange={(date) => onChange(date)}>
-      <PickerComponent />
-    </DateTimeContextProvider>
+      <DateTimePickerComponent />
+    </DateTimePickerContextProvider>
   );
 }
 
-function PickerComponent() {
-  const { view } = useDateTime();
+function DateTimePickerComponent() {
+  const { view } = useDTPCxt();
 
   return (
     <div className='absolute z-10 mt-2 border rounded w-72 p-4'>

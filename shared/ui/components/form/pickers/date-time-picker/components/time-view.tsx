@@ -1,7 +1,7 @@
-import { useDateTime } from '../context';
+import { useDTPCxt } from '../dtp-context';
 
 export default function TimeView() {
-  const { dateTime, setDateTime, setView } = useDateTime();
+  const { dateTime, setDateTime, setView } = useDTPCxt();
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
   const minutes = Array.from({ length: 60 }, (_, i) => i);

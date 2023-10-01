@@ -1,4 +1,4 @@
-import { useDateTime } from '../context';
+import { useDTPCxt } from '../dtp-context';
 
 export default function CalendarView() {
   const {
@@ -12,7 +12,7 @@ export default function CalendarView() {
     todaysDate,
     getDaysInMonth,
     startOfMonth,
-  } = useDateTime();
+  } = useDTPCxt();
 
   const daysInMonth = getDaysInMonth(dateTime);
   const firstDayOfMonth = startOfMonth(dateTime).getDay();

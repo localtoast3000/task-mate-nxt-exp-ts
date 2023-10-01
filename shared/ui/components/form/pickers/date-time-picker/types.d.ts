@@ -1,13 +1,13 @@
-import React from 'react';
+import { ReactNode } from 'react';
 
-export interface DatePickerContextProps {
+export interface DateTimePickerProps {
   disablePastDates: boolean;
   startWeekOnMonday: boolean;
   minDate?: Date;
   maxDate?: Date;
   yearRange: number[];
   onChange?: (date: Date) => void;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export type ViewTypes = 'calendar' | 'year' | 'time';

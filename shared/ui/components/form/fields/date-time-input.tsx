@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { InputFieldProps } from '../types';
-import { DatePicker, DatePickerProps } from '../pickers/date-picker/exports';
+import { DateTimePicker, DateTimePickerProps } from '../pickers/date-time-picker/exports';
 import format from 'date-fns/format';
 
-export interface DateInputProps extends Partial<InputFieldProps> {
+export interface DateTimeInputProps extends Partial<InputFieldProps> {
   onChange?: (date: Date) => void;
   onValueChange?: (val: any) => void;
   classNames?: {
@@ -11,10 +11,10 @@ export interface DateInputProps extends Partial<InputFieldProps> {
     error?: string;
   };
   picker: boolean;
-  pickerProps: DatePickerProps;
+  pickerProps: DateTimePickerProps;
 }
 
-export default function DateInput({
+export default function DateTimeInput({
   register,
   name,
   rules,
@@ -29,7 +29,7 @@ export default function DateInput({
   picker,
   pickerProps,
   ...props
-}: DateInputProps) {
+}: DateTimeInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState<Date>(
     props.defaultValue instanceof Date ? props.defaultValue : new Date()
@@ -56,7 +56,7 @@ export default function DateInput({
         {error?.message}
       </p>
       {picker && isOpen ? (
-        <DatePicker
+        <DateTimePicker
           {...pickerProps}
           onChange={(date) => setValue(date)}
         />

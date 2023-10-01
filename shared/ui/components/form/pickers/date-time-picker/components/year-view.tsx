@@ -1,7 +1,7 @@
-import { useDateTime } from '../context';
+import { useDTPCxt } from '../dtp-context';
 
 export default function YearView() {
-  const { dateTime, yearRange, setView, setDateTime } = useDateTime();
+  const { dateTime, yearRange, setView, setDateTime } = useDTPCxt();
 
   // Generate an array of years between the start and end years
   const generateYearRange = (start: number, end: number) => {

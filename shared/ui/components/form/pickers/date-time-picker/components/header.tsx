@@ -1,4 +1,4 @@
-import { useDateTime } from '../context';
+import { useDTPCxt } from '../dtp-context';
 
 export default function Header() {
   const {
@@ -11,7 +11,7 @@ export default function Header() {
     conditions,
     view,
     setView,
-  } = useDateTime();
+  } = useDTPCxt();
 
   const previousMonth = new Date(dateTime.getFullYear(), dateTime.getMonth() - 1, 1);
   const nextMonth = new Date(dateTime.getFullYear(), dateTime.getMonth() + 1, 1);

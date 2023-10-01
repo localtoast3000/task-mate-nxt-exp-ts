@@ -12,9 +12,9 @@ import {
   isBefore,
   isAfter,
 } from 'date-fns';
-import { DatePickerContextProps, ViewTypes } from './types';
+import { DateTimePickerProps, ViewTypes } from './types';
 
-interface DateTimeProps extends DatePickerContextProps {
+interface DateTimePickerContextProps extends DateTimePickerProps {
   dateTime: Date;
   view: ViewTypes;
   setDateTime: (newDateTime: Date) => void;
@@ -41,13 +41,13 @@ interface DateTimeProps extends DatePickerContextProps {
   };
 }
 
-const DateTimeContext = createContext<DateTimeProps | undefined>(undefined);
+const DateTimeContext = createContext<DateTimePickerContextProps | undefined>(undefined);
 
-export function DateTimeContextProvider({
+export function DateTimePickerContextProvider({
   children,
   onChange = () => {},
   ...props
-}: DatePickerContextProps) {
+}: DateTimePickerProps) {
   const [dateTime, setDateTime] = useState(new Date());
   const [view, setView] = useState<ViewTypes>('calendar');
 
@@ -138,7 +138,7 @@ export function DateTimeContextProvider({
   );
 }
 
-export function useDateTime() {
+export function useDTPCxt() {
   const context = useContext(DateTimeContext);
   if (context === undefined)
     throw new Error('useDateTime must be used within a DateTimeProvider');
