@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import {
   addDays,
   addMonths,
@@ -45,96 +52,73 @@ const DateTimeContext = createContext<DateTimePickerContextProps | undefined>(un
 
 export function DateTimePickerContextProvider({
   children,
+  initialDate = new Date(),
   onChange = () => {},
   ...props
 }: DateTimePickerProps) {
-  const [dateTime, setDateTime] = useState(new Date());
+  const [dateTime, setDateTime] = useState(initialDate);
   const [view, setView] = useState<ViewTypes>('calendar');
 
   useEffect(() => {
     onChange(dateTime);
   }, [dateTime]);
 
+  const updateDateTime = useCallback(
+    (modifier: 'add' | 'sub', options: any) => {
+      let newDate = dateTime;
+      const operations = {
+        day: addDays,
+        month: addMonths,
+        year: addYears,
+        hours: addHours,
+        minutes: addMinutes,
+        milliseconds: (date: Date, value: number) =>
+          new Date(date.getTime() + (modifier === 'add' ? value : -value)),
+      };
+
+      for (const [unit, operation] of Object.entries(operations)) {
+        if (options[unit]) {
+          newDate = operation(
+            newDate,
+            modifier === 'add' ? options[unit] : -options[unit]
+          );
+        }
+      }
+
+      setDateTime(newDate);
+    },
+    [dateTime]
+  );
+
+  const todaysDate = useCallback(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      dateTime,
+      view,
+      setDateTime,
+      setView,
+      updateDateTime,
+      todaysDate,
+      format,
+      startOfMonth,
+      getDaysInMonth,
+      conditions: {
+        isAfter: (date1: Date, date2: Date) => isAfter(date1, date2),
+        isBefore: (date1: Date, date2: Date) => isBefore(date1, date2),
+        isSameMonth: (date1: Date, date2: Date) => isSameMonth(date1, date2),
+      },
+      ...props,
+    }),
+    [dateTime, view, updateDateTime, todaysDate, props]
+  );
+
   return (
-    <DateTimeContext.Provider
-      value={{
-        dateTime,
-        view,
-        setDateTime,
-        setView,
-        updateDateTime: (modifier, options) => {
-          const {
-            day = 0,
-            month = 0,
-            year = 0,
-            hours = 0,
-            minutes = 0,
-            milliseconds = 0,
-          } = options;
-
-          let newDate = dateTime;
-
-          // Handle days
-          if (modifier === 'add') {
-            newDate = addDays(newDate, day);
-          } else {
-            newDate = addDays(newDate, -day);
-          }
-
-          // Handle months
-          if (modifier === 'add') {
-            newDate = addMonths(newDate, month);
-          } else {
-            newDate = addMonths(newDate, -month);
-          }
-
-          // Handle years
-          if (modifier === 'add') {
-            newDate = addYears(newDate, year);
-          } else {
-            newDate = addYears(newDate, -year);
-          }
-
-          // Handle hours
-          if (modifier === 'add') {
-            newDate = addHours(newDate, hours);
-          } else {
-            newDate = addHours(newDate, -hours);
-          }
-
-          // Handle minutes
-          if (modifier === 'add') {
-            newDate = addMinutes(newDate, minutes);
-          } else {
-            newDate = addMinutes(newDate, -minutes);
-          }
-
-          // Handle milliseconds
-          if (modifier === 'add') {
-            newDate = new Date(newDate.getTime() + milliseconds);
-          } else {
-            newDate = new Date(newDate.getTime() - milliseconds);
-          }
-
-          setDateTime(newDate);
-        },
-        todaysDate: () => {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          return today;
-        },
-        format,
-        startOfMonth,
-        getDaysInMonth,
-        conditions: {
-          isAfter: (date1, date2) => isAfter(date1, date2),
-          isBefore: (date1, date2) => isBefore(date1, date2),
-          isSameMonth: (date1, date2) => isSameMonth(date1, date2),
-        },
-        ...props,
-      }}>
-      {children}
-    </DateTimeContext.Provider>
+    <DateTimeContext.Provider value={contextValue}>{children}</DateTimeContext.Provider>
   );
 }
 

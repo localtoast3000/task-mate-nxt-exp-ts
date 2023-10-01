@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface DateTimePickerProps {
+  initialDate?: Date;
   disablePastDates: boolean;
   startWeekOnMonday: boolean;
   minDate?: Date;

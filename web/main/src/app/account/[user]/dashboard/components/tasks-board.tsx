@@ -85,6 +85,7 @@ function EditTaskModal({
           }}>
           <DateTimeInput
             name='task-end-date'
+            controlled
             picker
             pickerProps={{
               yearRange: [new Date().getFullYear(), 2033],

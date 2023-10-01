@@ -1,52 +1,97 @@
 import { useDTPCxt } from '../dtp-context';
+import { useMemo } from 'react';
 
 export default function CalendarView() {
-  const {
-    dateTime,
-    conditions,
-    startWeekOnMonday,
-    disablePastDates,
-    minDate,
-    maxDate,
-    setDateTime,
-    todaysDate,
-    getDaysInMonth,
-    startOfMonth,
-  } = useDTPCxt();
-
-  const daysInMonth = getDaysInMonth(dateTime);
-  const firstDayOfMonth = startOfMonth(dateTime).getDay();
+  const context = useDTPCxt();
+  const daysInMonth = context.getDaysInMonth(context.dateTime);
+  const firstDayOfMonth = context.startOfMonth(context.dateTime).getDay();
   const totalDays = 42; // 6 weeks * 7 days
   const numberOfEmptyDays = totalDays - daysInMonth - firstDayOfMonth;
 
-  const daysOfWeek = startWeekOnMonday
+  const daysOfWeek = context.startWeekOnMonday
     ? ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   return (
     <div className='grid grid-cols-7 gap-1 items-center justify-center'>
-      {daysOfWeek.map((d, index) => (
+      <DaysOfWeek days={daysOfWeek} />
+      <EmptyDays count={firstDayOfMonth} />
+      <Days
+        context={context}
+        daysInMonth={daysInMonth}
+      />
+      <EmptyDays count={numberOfEmptyDays} />
+    </div>
+  );
+}
+
+interface DaysOfWeekProps {
+  days: string[];
+}
+
+function DaysOfWeek({ days }: DaysOfWeekProps) {
+  return (
+    <>
+      {days.map((d, index) => (
         <div
           key={index}
           className='w-full h-10 text-center'>
           <p>{d}</p>
         </div>
       ))}
-      {Array.from({ length: firstDayOfMonth }, (_, i) => i).map((_, index) => (
+    </>
+  );
+}
+
+interface EmptyDaysProps {
+  count: number;
+}
+
+function EmptyDays({ count }: EmptyDaysProps) {
+  const emptyDays = useMemo(() => Array.from({ length: count }), [count]);
+
+  return (
+    <>
+      {emptyDays.map((_, index) => (
         <div
           key={index}
           className='w-full h-10'
         />
       ))}
-      {Array.from({ length: daysInMonth }).map((_, dayIndex) => {
+    </>
+  );
+}
+
+interface DaysProps {
+  daysInMonth: number;
+  context: ReturnType<typeof useDTPCxt>;
+}
+
+function Days({ daysInMonth, context }: DaysProps) {
+  const days = useMemo(() => Array.from({ length: daysInMonth }), [daysInMonth]);
+
+  return (
+    <>
+      {days.map((_, dayIndex) => {
         const day = dayIndex + 1;
-        const thisDay = new Date(dateTime.getFullYear(), dateTime.getMonth(), day);
+        const thisDay = new Date(
+          context.dateTime.getFullYear(),
+          context.dateTime.getMonth(),
+          day,
+          context.dateTime.getHours(),
+          context.dateTime.getMinutes(),
+          context.dateTime.getSeconds(),
+          context.dateTime.getMilliseconds()
+        );
         const isBeforeToday =
-          disablePastDates && conditions.isBefore(thisDay, todaysDate());
-        const isBeforeMin = minDate && conditions.isBefore(thisDay, minDate);
-        const isAfterMax = maxDate && conditions.isAfter(thisDay, maxDate);
+          context.disablePastDates &&
+          context.conditions.isBefore(thisDay, context.todaysDate());
+        const isBeforeMin =
+          context.minDate && context.conditions.isBefore(thisDay, context.minDate);
+        const isAfterMax =
+          context.maxDate && context.conditions.isAfter(thisDay, context.maxDate);
         const isDisabled = isBeforeToday || isBeforeMin || isAfterMax;
-        const isSelected = thisDay.getTime() === dateTime.getTime();
+        const isSelected = thisDay.getTime() === context.dateTime.getTime();
 
         return (
           <button
@@ -60,19 +105,14 @@ export default function CalendarView() {
             } btn`}
             onClick={() => {
               if (!isDisabled) {
-                setDateTime(thisDay); // Update the context's dateTime
+                context.setDateTime(thisDay);
+                context.setView('time');
               }
             }}>
             <p>{day}</p>
           </button>
         );
       })}
-      {Array.from({ length: numberOfEmptyDays }, (_, i) => i).map((_, index) => (
-        <div
-          key={index}
-          className='w-full h-10'
-        />
-      ))}
-    </div>
+    </>
   );
 }

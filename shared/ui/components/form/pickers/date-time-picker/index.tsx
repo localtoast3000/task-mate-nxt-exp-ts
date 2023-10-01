@@ -19,17 +19,19 @@ function DateTimePickerComponent() {
   const { view } = useDTPCxt();
 
   return (
-    <div className='absolute z-10 mt-2 border rounded w-72 p-4'>
+    <div className='absolute z-10 mt-2 border rounded w-72 p-4 bg-black'>
       <Header />
-      {view === 'calendar' ? (
-        <CalendarView />
-      ) : view === 'year' ? (
-        <YearView />
-      ) : view === 'time' ? (
-        <TimeView />
-      ) : (
-        <CalendarView />
-      )}
+      <div className='w-full h-[350px] overflow-hidden'>
+        {view === 'calendar' ? (
+          <CalendarView />
+        ) : view === 'year' ? (
+          <YearView />
+        ) : view === 'time' ? (
+          <TimeView />
+        ) : (
+          <CalendarView />
+        )}
+      </div>
     </div>
   );
 }

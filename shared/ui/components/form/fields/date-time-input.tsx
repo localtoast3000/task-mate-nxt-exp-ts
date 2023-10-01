@@ -43,14 +43,19 @@ export default function DateTimeInput({
   return (
     <div className='relative'>
       <input
-        {...props}
         type='date'
-        readOnly={picker ? true : false}
-        value={format(value, 'yyyy-MM-dd')}
-        onClick={() => (picker ? setIsOpen(!isOpen) : null)}
+        value={value}
         {...register(name, rules)}
-        className='border rounded px-3 py-2 focus:outline-none focus:border-blue-500'
+        className='hidden'
+        {...props}
       />
+      <div
+        role='textbox'
+        tabIndex={0}
+        onClick={() => (picker ? setIsOpen(!isOpen) : null)}
+        className='border cursor-pointer rounded px-3 py-2 focus:outline-none focus:border-blue-500'>
+        {format(value, 'dd/MM/yyyy HH:mm')}
+      </div>
       <p
         className={`${classNames.error} text-error ${error?.message ? 'mt-[10px]' : ''}`}>
         {error?.message}
@@ -58,6 +63,7 @@ export default function DateTimeInput({
       {picker && isOpen ? (
         <DateTimePicker
           {...pickerProps}
+          initialDate={value}
           onChange={(date) => setValue(date)}
         />
       ) : (
