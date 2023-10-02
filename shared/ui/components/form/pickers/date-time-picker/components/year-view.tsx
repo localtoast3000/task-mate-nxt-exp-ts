@@ -11,9 +11,23 @@ interface YearButtonProps {
   minDate?: Date;
   maxDate?: Date;
   disablePastDates?: boolean;
+  classNames?: {
+    button?: string;
+    disabled?: string;
+    selected?: string;
+  };
 }
 
-export default function YearView() {
+interface YearViewProps {
+  classNames?: {
+    container?: string;
+    button?: string;
+    disabled?: string;
+    selected?: string;
+  };
+}
+
+export default function YearView({ classNames }: YearViewProps) {
   const {
     dateTime,
     yearRange,
@@ -36,7 +50,11 @@ export default function YearView() {
   }, []);
 
   return (
-    <div className='grid gap-[3px] grid-cols-4 w-full h-full overflow-y-auto'>
+    <div
+      className={
+        classNames?.container ||
+        'grid gap-[3px] grid-cols-4 w-full h-full overflow-y-auto'
+      }>
       {displayedYears.map((year) => (
         <YearButton
           key={year}
@@ -48,6 +66,11 @@ export default function YearView() {
           minDate={minDate}
           maxDate={maxDate}
           disablePastDates={disablePastDates}
+          classNames={{
+            button: classNames?.button,
+            disabled: classNames?.disabled,
+            selected: classNames?.selected,
+          }}
           ref={year === dateTime.getFullYear() ? selectedYearRef : null}
         />
       ))}
@@ -66,6 +89,7 @@ const YearButton = React.forwardRef<HTMLButtonElement, YearButtonProps>(
       minDate,
       maxDate,
       disablePastDates,
+      classNames,
     },
     ref
   ) {
@@ -77,11 +101,12 @@ const YearButton = React.forwardRef<HTMLButtonElement, YearButtonProps>(
     return (
       <button
         ref={ref}
-        className={`btn btn-ghost ${
+        className={`${classNames?.button || 'btn btn-ghost'} ${
           isDisabled
-            ? 'opacity-disabled no-animation hover:bg-transparent cursor-default'
+            ? classNames?.disabled ||
+              'opacity-disabled no-animation hover:bg-transparent cursor-default'
             : isSelected
-            ? 'bg-primary hover:bg-primary hover:opacity-on-hover'
+            ? classNames?.selected || 'bg-primary hover:bg-primary hover:opacity-on-hover'
             : ''
         }`}
         type='button'

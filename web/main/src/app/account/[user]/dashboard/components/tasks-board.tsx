@@ -90,11 +90,11 @@ function EditTaskModal({
             pickerProps={{
               yearRange: [
                 new Date().getFullYear(),
-                addYears(new Date(), 100).getFullYear(),
+                addYears(new Date(), 27).getFullYear(),
               ],
               disablePastDates: true,
               startWeekOnMonday: true,
-              maxDate: addYears(new Date(), 100),
+              maxDate: addYears(new Date(), 10),
             }}
           />
           <button
