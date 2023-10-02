@@ -96,6 +96,7 @@ function Days({ daysInMonth, context }: DaysProps) {
         return (
           <button
             key={day}
+            type='button'
             className={`w-full btn-ghost h-10 text-center ${
               isDisabled
                 ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default'

@@ -37,6 +37,7 @@ interface YearButtonProps {
 const YearButton: React.FC<YearButtonProps> = ({ dateTime, setView, view }) => {
   return (
     <button
+      type='button'
       className={`btn btn-ghost btn-sm flex items-center justify-self-start ${
         view === 'year' ? '' : 'text-neutral'
       }`}
@@ -56,6 +57,7 @@ interface TimeButtonProps {
 const TimeButton: React.FC<TimeButtonProps> = ({ dateTime, view, setView, format }) => {
   return (
     <button
+      type='button'
       onClick={() => setView('time')}
       className={`btn btn-ghost justify-self-end ${
         view === 'time' ? '' : 'text-neutral'
@@ -77,6 +79,7 @@ interface MonthButtonProps {
 const MonthButton: React.FC<MonthButtonProps> = ({ dateTime, setView, format, view }) => {
   return (
     <button
+      type='button'
       className={`btn btn-ghost btn-sm flex items-center justify-self-start ${
         view === 'calendar' ? '' : 'text-neutral'
       }`}
@@ -151,6 +154,7 @@ interface NavButtonProps {
 const CalendarNavButton: React.FC<NavButtonProps> = ({ disabled, onClick, points }) => {
   return (
     <button
+      type='button'
       className={`btn btn-ghost btn-sm ${
         disabled ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default' : ''
       }`}

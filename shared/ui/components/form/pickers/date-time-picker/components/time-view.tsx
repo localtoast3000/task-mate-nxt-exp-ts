@@ -76,6 +76,7 @@ const TimeButton: React.FC<TimeButtonProps> = React.memo(
   ({ value, onClickValue, isSelected }) => {
     return (
       <button
+        type='button'
         className={`btn btn-ghost w-full text-center ${
           isSelected ? 'bg-blue-500 text-white' : ''
         }`}
