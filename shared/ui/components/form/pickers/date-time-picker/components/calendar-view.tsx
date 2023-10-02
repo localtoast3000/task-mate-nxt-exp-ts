@@ -35,7 +35,7 @@ function DaysOfWeek({ days }: DaysOfWeekProps) {
       {days.map((d, index) => (
         <div
           key={index}
-          className='w-full h-10 text-center'>
+          className='w-full h-10 text-center text-neutral'>
           <p>{d}</p>
         </div>
       ))}

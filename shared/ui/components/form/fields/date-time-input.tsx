@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, RefObject } from 'react';
 import { InputFieldProps } from '../types';
 import { DateTimePicker, DateTimePickerProps } from '../pickers/date-time-picker/exports';
 import format from 'date-fns/format';
@@ -31,9 +31,23 @@ export default function DateTimeInput({
   ...props
 }: DateTimeInputProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<Date>(
     props.defaultValue instanceof Date ? props.defaultValue : new Date()
   );
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [containerRef]);
 
   useEffect(() => {
     onChange(value);
@@ -41,7 +55,9 @@ export default function DateTimeInput({
   }, [value]);
 
   return (
-    <div className='relative'>
+    <div
+      className='relative'
+      ref={containerRef}>
       <input
         type='date'
         value={value}
@@ -64,7 +80,13 @@ export default function DateTimeInput({
         <DateTimePicker
           {...pickerProps}
           initialDate={value}
-          onChange={(date) => setValue(date)}
+          onChange={(date) => {
+            date.setMilliseconds(0);
+            setValue(date);
+            if (date.getMinutes() !== value.getMinutes()) {
+              setIsOpen(false);
+            }
+          }}
         />
       ) : (
         <></>

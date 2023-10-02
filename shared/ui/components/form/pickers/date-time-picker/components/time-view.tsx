@@ -31,10 +31,12 @@ export default function TimeView() {
       <TimeColumn
         values={HOURS}
         onClickValue={setHour}
+        selectedValue={dateTime.getHours()}
       />
       <TimeColumn
         values={MINUTES}
         onClickValue={setMinute}
+        selectedValue={dateTime.getMinutes()}
       />
     </div>
   );
@@ -43,33 +45,42 @@ export default function TimeView() {
 interface TimeColumnProps {
   values: number[];
   onClickValue: (value: number) => void;
+  selectedValue: number;
 }
 
-const TimeColumn: React.FC<TimeColumnProps> = React.memo(({ values, onClickValue }) => {
-  return (
-    <div className='flex-1 overflow-y-auto border-r'>
-      {values.map((value) => (
-        <TimeButton
-          key={value}
-          value={value}
-          onClickValue={onClickValue}
-        />
-      ))}
-    </div>
-  );
-});
+const TimeColumn: React.FC<TimeColumnProps> = React.memo(
+  ({ values, onClickValue, selectedValue }) => {
+    return (
+      <div className='flex-1 overflow-y-auto border-r'>
+        {values.map((value) => (
+          <TimeButton
+            key={value}
+            value={value}
+            onClickValue={onClickValue}
+            isSelected={value === selectedValue}
+          />
+        ))}
+      </div>
+    );
+  }
+);
 
 interface TimeButtonProps {
   value: number;
   onClickValue: (value: number) => void;
+  isSelected: boolean;
 }
 
-const TimeButton: React.FC<TimeButtonProps> = React.memo(({ value, onClickValue }) => {
-  return (
-    <button
-      className='btn btn-ghost w-full text-center'
-      onClick={() => onClickValue(value)}>
-      {value.toString().padStart(2, '0')}
-    </button>
-  );
-});
+const TimeButton: React.FC<TimeButtonProps> = React.memo(
+  ({ value, onClickValue, isSelected }) => {
+    return (
+      <button
+        className={`btn btn-ghost w-full text-center ${
+          isSelected ? 'bg-blue-500 text-white' : ''
+        }`}
+        onClick={() => onClickValue(value)}>
+        {value.toString().padStart(2, '0')}
+      </button>
+    );
+  }
+);

@@ -7,6 +7,7 @@ export default function Header() {
   return (
     <div className='grid grid-rows-2 grid-cols-2 w-full pb-[20px]'>
       <YearButton
+        view={context.view}
         dateTime={context.dateTime}
         setView={context.setView}
       />
@@ -17,6 +18,7 @@ export default function Header() {
         format={context.format}
       />
       <MonthButton
+        view={context.view}
         dateTime={context.dateTime}
         setView={context.setView}
         format={context.format}
@@ -28,13 +30,16 @@ export default function Header() {
 
 interface YearButtonProps {
   dateTime: Date;
+  view: ViewTypes;
   setView: (view: ViewTypes) => void;
 }
 
-const YearButton: React.FC<YearButtonProps> = ({ dateTime, setView }) => {
+const YearButton: React.FC<YearButtonProps> = ({ dateTime, setView, view }) => {
   return (
     <button
-      className='btn btn-ghost btn-sm flex items-center justify-self-start'
+      className={`btn btn-ghost btn-sm flex items-center justify-self-start ${
+        view === 'year' ? '' : 'text-neutral'
+      }`}
       onClick={() => setView('year')}>
       <span>{dateTime.getFullYear()}</span>
     </button>
@@ -53,6 +58,8 @@ const TimeButton: React.FC<TimeButtonProps> = ({ dateTime, view, setView, format
     <button
       onClick={() => setView('time')}
       className={`btn btn-ghost justify-self-end ${
+        view === 'time' ? '' : 'text-neutral'
+      } ${
         view === 'calendar' ? 'row-span-1 btn-sm' : 'row-span-2 self-end text-[1.5rem]'
       }`}>
       {format(dateTime, 'HH:mm')}
@@ -62,14 +69,17 @@ const TimeButton: React.FC<TimeButtonProps> = ({ dateTime, view, setView, format
 
 interface MonthButtonProps {
   dateTime: Date;
+  view: ViewTypes;
   setView: (view: ViewTypes) => void;
   format: (date: Date, format: string, options?: {}) => string;
 }
 
-const MonthButton: React.FC<MonthButtonProps> = ({ dateTime, setView, format }) => {
+const MonthButton: React.FC<MonthButtonProps> = ({ dateTime, setView, format, view }) => {
   return (
     <button
-      className='btn btn-ghost btn-sm flex items-center justify-self-start'
+      className={`btn btn-ghost btn-sm flex items-center justify-self-start ${
+        view === 'calendar' ? '' : 'text-neutral'
+      }`}
       onClick={() => setView('calendar')}>
       <span>{format(dateTime, 'MMMM')}</span>
     </button>

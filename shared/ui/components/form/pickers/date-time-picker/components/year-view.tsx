@@ -34,9 +34,10 @@ const YearButton = React.memo(function YearButton({
   setDateTime,
   setView,
 }: YearButtonProps) {
+  const isSelected = dateTime.getFullYear() === year;
   return (
     <button
-      className='btn btn-ghost'
+      className={`btn btn-ghost ${isSelected ? 'bg-blue-500 text-white' : ''}`}
       onClick={() => {
         const newDate = new Date(dateTime);
         newDate.setFullYear(year);
