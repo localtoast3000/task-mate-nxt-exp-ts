@@ -10,7 +10,7 @@ interface YearButtonProps {
 }
 
 export default function YearView() {
-  const { dateTime, yearRange, setView, setDateTime } = useDTPCxt();
+  const { dateTime, yearRange, setView, setDateTime, adjustDate } = useDTPCxt();
   const displayedYears = generateYearRange(yearRange[0], yearRange[1]);
 
   return (
@@ -22,6 +22,7 @@ export default function YearView() {
           dateTime={dateTime}
           setDateTime={setDateTime}
           setView={setView}
+          adjustDate={adjustDate}
         />
       ))}
     </div>
@@ -33,15 +34,16 @@ const YearButton = React.memo(function YearButton({
   dateTime,
   setDateTime,
   setView,
-}: YearButtonProps) {
-  const isSelected = dateTime.getFullYear() === year;
+  adjustDate,
+}: YearButtonProps & { adjustDate: (date: Date) => Date }) {
   return (
     <button
-      className={`btn btn-ghost ${isSelected ? 'bg-blue-500 text-white' : ''}`}
+      className='btn btn-ghost'
       onClick={() => {
         const newDate = new Date(dateTime);
         newDate.setFullYear(year);
-        setDateTime(new Date(newDate));
+        const adjustedDate = adjustDate(newDate);
+        setDateTime(adjustedDate);
         setView('calendar');
       }}>
       {year}

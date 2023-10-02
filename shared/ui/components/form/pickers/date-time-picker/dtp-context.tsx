@@ -46,6 +46,7 @@ interface DateTimePickerContextProps extends DateTimePickerProps {
     isBefore: (date1: Date, date2: Date) => boolean;
     isSameMonth: (date1: Date, date2: Date) => boolean;
   };
+  adjustDate: (date: Date) => Date;
 }
 
 const DateTimeContext = createContext<DateTimePickerContextProps | undefined>(undefined);
@@ -96,6 +97,25 @@ export function DateTimePickerContextProvider({
     return today;
   }, []);
 
+  const adjustDate = useCallback(
+    (date: Date) => {
+      if (props.disablePastDates && isBefore(date, todaysDate())) {
+        date.setMonth(new Date().getMonth());
+        date.setDate(new Date().getDate());
+      }
+      if (props.minDate && isBefore(date, props.minDate)) {
+        date.setMonth(props.minDate.getMonth());
+        date.setDate(props.minDate.getDate());
+      }
+      if (props.maxDate && isAfter(date, props.maxDate)) {
+        date.setMonth(props.maxDate.getMonth());
+        date.setDate(props.maxDate.getDate());
+      }
+      return date;
+    },
+    [props, todaysDate]
+  );
+
   const contextValue = useMemo(
     () => ({
       dateTime,
@@ -112,6 +132,7 @@ export function DateTimePickerContextProvider({
         isBefore: (date1: Date, date2: Date) => isBefore(date1, date2),
         isSameMonth: (date1: Date, date2: Date) => isSameMonth(date1, date2),
       },
+      adjustDate,
       ...props,
     }),
     [dateTime, view, updateDateTime, todaysDate, props]
