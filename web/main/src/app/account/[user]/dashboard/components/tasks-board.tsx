@@ -2,7 +2,7 @@ import { Task } from '@/types/tasks';
 import { useTasks } from '@/context/tasks';
 import { Form, DateTimeInput } from 'shared.ui/components/form/exports';
 import { useRef } from 'react';
-import { format } from 'date-fns';
+import { format, addYears } from 'date-fns';
 
 interface TaskCardProps extends Task {}
 
@@ -88,9 +88,13 @@ function EditTaskModal({
             controlled
             picker
             pickerProps={{
-              yearRange: [new Date().getFullYear(), 2033],
+              yearRange: [
+                new Date().getFullYear(),
+                addYears(new Date(), 100).getFullYear(),
+              ],
               disablePastDates: true,
               startWeekOnMonday: true,
+              maxDate: addYears(new Date(), 100),
             }}
           />
           <button

@@ -99,13 +99,13 @@ function Days({ daysInMonth, context }: DaysProps) {
             type='button'
             className={`w-full btn-ghost h-10 text-center ${
               isDisabled
-                ? 'opacity-[0.4] no-animation hover:bg-transparent cursor-default'
+                ? 'opacity-disabled no-animation hover:bg-transparent cursor-default'
                 : isSelected
-                ? 'bg-blue-500 text-white'
+                ? 'bg-primary hover:bg-primary hover:opacity-on-hover'
                 : ''
             } btn`}
             onClick={() => {
-              if (!isDisabled) {
+              if (!isDisabled && !isSelected) {
                 context.setDateTime(thisDay);
                 context.setView('time');
               }

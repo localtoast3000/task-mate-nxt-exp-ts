@@ -1,5 +1,5 @@
 import { useDTPCxt } from '../dtp-context';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { ViewTypes } from '../types';
 
 interface YearButtonProps {
@@ -7,14 +7,36 @@ interface YearButtonProps {
   dateTime: Date;
   setDateTime: (date: Date) => void;
   setView: (view: ViewTypes) => void;
+  adjustDate: (date: Date) => Date;
+  minDate?: Date;
+  maxDate?: Date;
+  disablePastDates?: boolean;
 }
 
 export default function YearView() {
-  const { dateTime, yearRange, setView, setDateTime, adjustDate } = useDTPCxt();
+  const {
+    dateTime,
+    yearRange,
+    setView,
+    setDateTime,
+    adjustDate,
+    minDate,
+    maxDate,
+    disablePastDates,
+  } = useDTPCxt();
   const displayedYears = generateYearRange(yearRange[0], yearRange[1]);
+  const selectedYearRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (selectedYearRef.current) {
+      selectedYearRef.current.scrollIntoView({
+        block: 'center',
+      });
+    }
+  }, []);
 
   return (
-    <div className='grid gap-[3px] grid-cols-4 w-full max-h-[280px] overflow-y-auto'>
+    <div className='grid gap-[3px] grid-cols-4 w-full h-full overflow-y-auto'>
       {displayedYears.map((year) => (
         <YearButton
           key={year}
@@ -23,34 +45,60 @@ export default function YearView() {
           setDateTime={setDateTime}
           setView={setView}
           adjustDate={adjustDate}
+          minDate={minDate}
+          maxDate={maxDate}
+          disablePastDates={disablePastDates}
+          ref={year === dateTime.getFullYear() ? selectedYearRef : null}
         />
       ))}
     </div>
   );
 }
 
-const YearButton = React.memo(function YearButton({
-  year,
-  dateTime,
-  setDateTime,
-  setView,
-  adjustDate,
-}: YearButtonProps & { adjustDate: (date: Date) => Date }) {
-  return (
-    <button
-      className='btn btn-ghost'
-      type='button'
-      onClick={() => {
-        const newDate = new Date(dateTime);
-        newDate.setFullYear(year);
-        const adjustedDate = adjustDate(newDate);
-        setDateTime(adjustedDate);
-        setView('calendar');
-      }}>
-      {year}
-    </button>
-  );
-});
+const YearButton = React.forwardRef<HTMLButtonElement, YearButtonProps>(
+  function YearButton(
+    {
+      year,
+      dateTime,
+      setDateTime,
+      setView,
+      adjustDate,
+      minDate,
+      maxDate,
+      disablePastDates,
+    },
+    ref
+  ) {
+    const isSelected = dateTime.getFullYear() === year;
+    const isDisabled =
+      (disablePastDates && year < (minDate?.getFullYear() || 0)) ||
+      year > (maxDate?.getFullYear() || Infinity);
+
+    return (
+      <button
+        ref={ref}
+        className={`btn btn-ghost ${
+          isDisabled
+            ? 'opacity-disabled no-animation hover:bg-transparent cursor-default'
+            : isSelected
+            ? 'bg-primary hover:bg-primary hover:opacity-on-hover'
+            : ''
+        }`}
+        type='button'
+        onClick={() => {
+          if (!isSelected && !isDisabled) {
+            const newDate = new Date(dateTime);
+            newDate.setFullYear(year);
+            const adjustedDate = adjustDate(newDate);
+            setDateTime(adjustedDate);
+            setView('calendar');
+          }
+        }}>
+        {year}
+      </button>
+    );
+  }
+);
 
 // Generate an array of years between the start and end years
 function generateYearRange(start: number, end: number): number[] {

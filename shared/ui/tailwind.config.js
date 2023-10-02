@@ -58,6 +58,8 @@ module.exports = (paths) => {
           medium: '0.6',
           semibold: '0.8',
           bold: '0.9',
+          disabled: '0.4',
+          'on-hover': '0.8',
           ...defaultTheme.opacity,
         },
       },
