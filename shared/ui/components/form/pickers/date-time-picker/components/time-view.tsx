@@ -33,6 +33,7 @@ export default function TimeView() {
         onClickValue={setHour}
         selectedValue={dateTime.getHours()}
       />
+      <div className='border-r' />
       <TimeColumn
         values={MINUTES}
         onClickValue={setMinute}
@@ -51,7 +52,7 @@ interface TimeColumnProps {
 const TimeColumn: React.FC<TimeColumnProps> = React.memo(
   ({ values, onClickValue, selectedValue }) => {
     return (
-      <div className='flex-1 overflow-y-auto border-r'>
+      <div className='flex-1 overflow-y-auto'>
         {values.map((value) => (
           <TimeButton
             key={value}
