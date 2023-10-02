@@ -16,6 +16,11 @@ interface YearButtonProps {
     disabled?: string;
     selected?: string;
   };
+  styles?: {
+    button?: React.CSSProperties;
+    disabled?: React.CSSProperties;
+    selected?: React.CSSProperties;
+  };
 }
 
 interface YearViewProps {
@@ -25,9 +30,45 @@ interface YearViewProps {
     disabled?: string;
     selected?: string;
   };
+  styles?: {
+    container?: React.CSSProperties;
+  };
+  buttonStyles?: {
+    button?: React.CSSProperties;
+    disabled?: React.CSSProperties;
+    selected?: React.CSSProperties;
+  };
 }
 
-export default function YearView({ classNames }: YearViewProps) {
+const defaultStyles = {
+  container: {
+    display: 'grid',
+    gap: '3px',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    width: '100%',
+    height: '100%',
+    overflowY: 'auto' as 'auto',
+  },
+  button: {
+    width: '100%',
+    textAlign: 'center' as 'center',
+    border: '1px solid transparent',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+    backgroundColor: 'transparent',
+    color: 'white',
+  },
+  disabled: {
+    opacity: 0.5,
+    cursor: 'not-allowed',
+  },
+  selected: {
+    backgroundColor: '#3498db',
+    color: 'white',
+  },
+};
+
+export default function YearView({ classNames, styles, buttonStyles }: YearViewProps) {
   const {
     dateTime,
     yearRange,
@@ -51,10 +92,8 @@ export default function YearView({ classNames }: YearViewProps) {
 
   return (
     <div
-      className={
-        classNames?.container ||
-        'grid gap-[3px] grid-cols-4 w-full h-full overflow-y-auto'
-      }>
+      style={{ ...defaultStyles.container, ...styles?.container }}
+      className={classNames?.container}>
       {displayedYears.map((year) => (
         <YearButton
           key={year}
@@ -71,6 +110,7 @@ export default function YearView({ classNames }: YearViewProps) {
             disabled: classNames?.disabled,
             selected: classNames?.selected,
           }}
+          styles={buttonStyles}
           ref={year === dateTime.getFullYear() ? selectedYearRef : null}
         />
       ))}
@@ -90,6 +130,7 @@ const YearButton = React.forwardRef<HTMLButtonElement, YearButtonProps>(
       maxDate,
       disablePastDates,
       classNames,
+      styles,
     },
     ref
   ) {
@@ -101,12 +142,17 @@ const YearButton = React.forwardRef<HTMLButtonElement, YearButtonProps>(
     return (
       <button
         ref={ref}
-        className={`${classNames?.button || 'btn btn-ghost'} ${
+        style={{
+          ...defaultStyles.button,
+          ...(isDisabled ? defaultStyles.disabled : {}),
+          ...(isSelected ? defaultStyles.selected : {}),
+          ...styles?.button,
+        }}
+        className={`${classNames?.button || ''} ${
           isDisabled
-            ? classNames?.disabled ||
-              'opacity-disabled no-animation hover:bg-transparent cursor-default'
+            ? classNames?.disabled || ''
             : isSelected
-            ? classNames?.selected || 'bg-primary hover:bg-primary hover:opacity-on-hover'
+            ? classNames?.selected || ''
             : ''
         }`}
         type='button'

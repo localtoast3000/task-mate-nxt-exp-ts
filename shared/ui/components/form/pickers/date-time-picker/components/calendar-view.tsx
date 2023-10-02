@@ -1,7 +1,55 @@
 import { useDTPCxt } from '../dtp-context';
 import { useMemo } from 'react';
 
-export default function CalendarView() {
+const defaultStyles = {
+  calendarContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(7, 1fr)',
+    gap: '1px',
+  },
+  dayContainer: {
+    width: '100%',
+    height: '40px',
+    textAlign: 'center' as 'center',
+  },
+  dayButton: {
+    width: '100%',
+    height: '40px',
+    textAlign: 'center' as 'center',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  selectedDayButton: {
+    backgroundColor: '#3498db',
+  },
+  disabledDayButton: {
+    opacity: '0.5',
+    cursor: 'not-allowed',
+  },
+};
+
+interface CalendarViewProps {
+  classNames?: {
+    container?: string;
+    dayContainer?: string;
+    dayButton?: string;
+    selectedDayButton?: string;
+    disabledDayButton?: string;
+  };
+  styles?: {
+    container?: React.CSSProperties;
+    dayContainer?: React.CSSProperties;
+    dayButton?: React.CSSProperties;
+    selectedDayButton?: React.CSSProperties;
+    disabledDayButton?: React.CSSProperties;
+  };
+}
+
+export default function CalendarView({
+  classNames = {},
+  styles = {},
+}: CalendarViewProps) {
   const context = useDTPCxt();
   const daysInMonth = context.getDaysInMonth(context.dateTime);
   const firstDayOfMonth = context.startOfMonth(context.dateTime).getDay();
@@ -13,12 +61,16 @@ export default function CalendarView() {
     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   return (
-    <div className='grid grid-cols-7 gap-1 items-center justify-center'>
+    <div
+      style={{ ...defaultStyles.calendarContainer, ...styles.container }}
+      className={classNames.container}>
       <DaysOfWeek days={daysOfWeek} />
       <EmptyDays count={firstDayOfMonth} />
       <Days
         context={context}
         daysInMonth={daysInMonth}
+        classNames={classNames}
+        styles={styles}
       />
       <EmptyDays count={numberOfEmptyDays} />
     </div>
@@ -35,7 +87,7 @@ function DaysOfWeek({ days }: DaysOfWeekProps) {
       {days.map((d, index) => (
         <div
           key={index}
-          className='w-full h-10 text-center text-neutral'>
+          style={defaultStyles.dayContainer}>
           <p>{d}</p>
         </div>
       ))}
@@ -55,7 +107,7 @@ function EmptyDays({ count }: EmptyDaysProps) {
       {emptyDays.map((_, index) => (
         <div
           key={index}
-          className='w-full h-10'
+          style={defaultStyles.dayContainer}
         />
       ))}
     </>
@@ -65,9 +117,11 @@ function EmptyDays({ count }: EmptyDaysProps) {
 interface DaysProps {
   daysInMonth: number;
   context: ReturnType<typeof useDTPCxt>;
+  classNames: CalendarViewProps['classNames'];
+  styles: CalendarViewProps['styles'];
 }
 
-function Days({ daysInMonth, context }: DaysProps) {
+function Days({ daysInMonth, context, classNames, styles }: DaysProps) {
   const days = useMemo(() => Array.from({ length: daysInMonth }), [daysInMonth]);
 
   return (
@@ -97,13 +151,21 @@ function Days({ daysInMonth, context }: DaysProps) {
           <button
             key={day}
             type='button'
-            className={`w-full btn-ghost h-10 text-center ${
-              isDisabled
-                ? 'opacity-disabled no-animation hover:bg-transparent cursor-default'
-                : isSelected
-                ? 'bg-primary hover:bg-primary hover:opacity-on-hover'
+            style={{
+              ...defaultStyles.dayButton,
+              ...(isSelected ? defaultStyles.selectedDayButton : {}),
+              ...(isDisabled ? defaultStyles.disabledDayButton : {}),
+              ...styles?.dayButton,
+              ...(isSelected ? styles?.selectedDayButton : {}),
+              ...(isDisabled ? styles?.disabledDayButton : {}),
+            }}
+            className={`${classNames?.dayButton || ''} ${
+              isSelected
+                ? classNames?.selectedDayButton || ''
+                : isDisabled
+                ? classNames?.disabledDayButton || ''
                 : ''
-            } btn`}
+            }`}
             onClick={() => {
               if (!isDisabled && !isSelected) {
                 context.setDateTime(thisDay);
