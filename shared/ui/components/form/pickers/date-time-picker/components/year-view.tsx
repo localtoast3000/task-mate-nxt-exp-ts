@@ -6,7 +6,7 @@ interface YearButtonProps {
   year: number;
   dateTime: Date;
   setDateTime: (date: Date) => void;
-  setView: (view: ViewTypes) => void; // <-- Update this line
+  setView: (view: ViewTypes) => void;
 }
 
 export default function YearView() {
@@ -40,7 +40,7 @@ const YearButton = React.memo(function YearButton({
       onClick={() => {
         const newDate = new Date(dateTime);
         newDate.setFullYear(year);
-        setDateTime(new Date(newDate)); // Update the dateTime in context
+        setDateTime(new Date(newDate));
         setView('calendar');
       }}>
       {year}
