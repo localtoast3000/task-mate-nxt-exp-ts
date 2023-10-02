@@ -112,13 +112,11 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewProps
   );
 }
 
-interface TimeColumnProps {
+interface TimeColumnProps extends TimeViewProps {
   values: number[];
   onClickValue: (value: number) => void;
   selectedValue: number;
   refValue: React.RefObject<HTMLButtonElement>;
-  styles?: typeof defaultStyles;
-  classNames?: typeof defaultClassNames;
 }
 
 const TimeColumn: React.FC<TimeColumnProps> = React.memo(
