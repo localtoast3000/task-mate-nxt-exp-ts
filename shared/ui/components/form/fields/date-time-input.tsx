@@ -87,6 +87,9 @@ export default function DateTimeInput({
               setIsOpen(false);
             }
           }}
+          classNames={{
+            container: 'w-full max-w-[400px]',
+          }}
         />
       ) : (
         <></>

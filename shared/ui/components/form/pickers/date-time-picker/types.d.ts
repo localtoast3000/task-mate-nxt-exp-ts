@@ -15,16 +15,16 @@ export interface DateTimePickerProps {
 
 export interface DateTimePickerStyleProps {
   styles?: {
-    container: CSSProperties;
-    viewContainer: CSSProperties;
+    container?: CSSProperties;
+    viewContainer?: CSSProperties;
     header?: HeaderStyleProps['styles'];
     yearView?: YearViewStyleProps['styles'];
     calendarView?: CalendarViewStyleProps['styles'];
     timeView?: TimeViewStyleProps['styles'];
   };
   classNames?: {
-    container: string;
-    viewContainer: string;
+    container?: string;
+    viewContainer?: string;
     header?: HeaderStyleProps['classNames'];
     yearView?: YearViewStyleProps['classNames'];
     calendarView?: CalendarViewStyleProps['classNames'];

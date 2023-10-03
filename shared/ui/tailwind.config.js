@@ -10,6 +10,7 @@ module.exports = (paths) => {
 
   return {
     content: [...buildContentPaths(paths)],
+    important: true,
     daisyui: {
       themes: [
         {
