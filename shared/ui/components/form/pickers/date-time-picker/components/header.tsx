@@ -1,105 +1,9 @@
 import { useDTPCxt } from '../dtp-context';
-import { ViewTypes } from '../types';
+import { ViewTypes, HeaderStyleProps } from '../types';
 import React from 'react';
+import { header as defaultStyles } from '../default-styles';
 
-const defaultStyles = {
-  container: {
-    display: 'grid',
-    gridTemplateRows: 'repeat(2, 20px)',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: 10,
-    width: '100%',
-    paddingBottom: '20px',
-  },
-  viewButton: {
-    opacity: 0.8,
-  },
-  viewButtonActive: {
-    opacity: 1,
-  },
-  yearButton: {
-    justifySelf: 'start',
-  },
-  yearButtonActive: {},
-  timeButton: {
-    justifySelf: 'end',
-  },
-  timeButtonActive: {},
-  timeButtonSpan: {
-    gridRow: 'span 2',
-    alignSelf: 'end',
-    fontSize: '1.5rem',
-  },
-  monthButton: {
-    justifySelf: 'start',
-  },
-  monthButtonActive: {},
-  navButtonsWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'end',
-    gap: 30,
-  },
-  navButtonsHidden: {
-    display: 'none',
-  },
-  navButton: {
-    opacity: 1,
-  },
-  navButtonDisabled: {
-    opacity: 0.6,
-  },
-  navButtonIcon: {
-    opacity: 1,
-    width: 10,
-    height: 10,
-    fill: 'white',
-  },
-  navButtonIconDisabled: {
-    opacity: 0.6,
-  },
-};
-
-interface HeaderProps {
-  classNames?: {
-    container?: string;
-    viewButton?: string;
-    viewButtonActive?: string;
-    yearButton?: string;
-    yearButtonActive?: string;
-    timeButton?: string;
-    timeButtonSpan?: string;
-    timeButtonActive?: string;
-    monthButton?: string;
-    monthButtonActive?: string;
-    navButtonsWrapper?: string;
-    navButtonsHidden?: string;
-    navButton?: string;
-    navButtonDisabled?: string;
-    navButtonIcon?: string;
-    navButtonIconDisabled?: string;
-  };
-  styles?: {
-    container?: React.CSSProperties;
-    viewButton?: React.CSSProperties;
-    viewButtonActive?: React.CSSProperties;
-    yearButton?: React.CSSProperties;
-    yearButtonActive?: React.CSSProperties;
-    timeButton?: React.CSSProperties;
-    timeButtonSpan?: React.CSSProperties;
-    timeButtonActive?: React.CSSProperties;
-    monthButton?: React.CSSProperties;
-    monthButtonActive?: React.CSSProperties;
-    navButtonsWrapper?: React.CSSProperties;
-    navButtonsHidden?: React.CSSProperties;
-    navButton?: React.CSSProperties;
-    navButtonDisabled?: React.CSSProperties;
-    navButtonIcon?: React.CSSProperties;
-    navButtonIconDisabled?: React.CSSProperties;
-  };
-}
-
-export default function Header({ classNames = {}, styles = {} }: HeaderProps) {
+export default function Header({ classNames = {}, styles = {} }: HeaderStyleProps) {
   const context = useDTPCxt();
 
   return (
@@ -141,7 +45,7 @@ export default function Header({ classNames = {}, styles = {} }: HeaderProps) {
   );
 }
 
-interface YearButtonProps extends HeaderProps {
+interface YearButtonProps extends HeaderStyleProps {
   dateTime: Date;
   view: ViewTypes;
   setView: (view: ViewTypes) => void;
@@ -176,7 +80,7 @@ const YearButton: React.FC<YearButtonProps> = ({
   );
 };
 
-interface TimeButtonProps extends HeaderProps {
+interface TimeButtonProps extends HeaderStyleProps {
   dateTime: Date;
   view: ViewTypes;
   setView: (view: ViewTypes) => void;
@@ -217,7 +121,7 @@ const TimeButton: React.FC<TimeButtonProps> = ({
   );
 };
 
-interface MonthButtonProps extends HeaderProps {
+interface MonthButtonProps extends HeaderStyleProps {
   dateTime: Date;
   view: ViewTypes;
   setView: (view: ViewTypes) => void;
@@ -254,7 +158,7 @@ const MonthButton: React.FC<MonthButtonProps> = ({
   );
 };
 
-interface CalendarNavButtonProps extends HeaderProps {
+interface CalendarNavButtonProps extends HeaderStyleProps {
   dateTime: Date;
   minDate?: Date;
   maxDate?: Date;
@@ -322,7 +226,7 @@ const CalendarNavButtons: React.FC<CalendarNavButtonProps> = ({
   );
 };
 
-interface NavButtonProps extends HeaderProps {
+interface NavButtonProps extends HeaderStyleProps {
   disabled?: boolean;
   onClick: () => void;
   points: string;

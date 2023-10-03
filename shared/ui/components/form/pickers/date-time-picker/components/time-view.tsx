@@ -1,53 +1,12 @@
 import { useDTPCxt } from '../dtp-context';
 import React, { useCallback, useRef, useEffect } from 'react';
+import { TimeViewStyleProps } from '../types';
+import { timeView as defaultStyles } from '../default-styles';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = Array.from({ length: 60 }, (_, i) => i);
 
-const defaultStyles = {
-  container: {
-    display: 'flex',
-    height: '100%',
-    overflow: 'scroll',
-  },
-  column: {
-    flex: 1,
-    overflowY: 'auto' as 'auto',
-  },
-  button: {
-    width: '100%',
-    textAlign: 'center' as 'center',
-    margin: '10px 0',
-  },
-  selected: {
-    backgroundColor: '#3498db',
-  },
-  divider: {
-    borderRight: '1px solid',
-    margin: '0 20px',
-  },
-};
-
-interface TimeViewProps {
-  classNames?: {
-    container?: string;
-    column?: string;
-    button?: string;
-    disabled?: string;
-    selected?: string;
-    divider?: string;
-  };
-  styles?: {
-    button?: React.CSSProperties;
-    container?: React.CSSProperties;
-    column?: React.CSSProperties;
-    disabled?: React.CSSProperties;
-    selected?: React.CSSProperties;
-    divider?: React.CSSProperties;
-  };
-}
-
-export default function TimeView({ classNames = {}, styles = {} }: TimeViewProps) {
+export default function TimeView({ classNames = {}, styles = {} }: TimeViewStyleProps) {
   const { dateTime, setDateTime, setView } = useDTPCxt();
 
   const hourRef = useRef<HTMLButtonElement | null>(null);
@@ -116,7 +75,7 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewProps
   );
 }
 
-interface TimeColumnProps extends TimeViewProps {
+interface TimeColumnProps extends TimeViewStyleProps {
   values: number[];
   onClickValue: (value: number) => void;
   selectedValue: number;

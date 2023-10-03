@@ -1,50 +1,12 @@
 import { useDTPCxt } from '../dtp-context';
 import React, { useMemo } from 'react';
-
-const defaultStyles = {
-  calendarContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: 10,
-  },
-  dayContainer: {
-    width: '100%',
-    textAlign: 'center' as 'center',
-    marginBottom: 10,
-  },
-  dayButton: {
-    width: '100%',
-    textAlign: 'center' as 'center',
-  },
-  selectedDayButton: {
-    backgroundColor: '#3498db',
-  },
-  disabledDayButton: {
-    opacity: '0.5',
-  },
-};
-
-interface CalendarViewProps {
-  classNames?: {
-    container?: string;
-    dayContainer?: string;
-    dayButton?: string;
-    selectedDayButton?: string;
-    disabledDayButton?: string;
-  };
-  styles?: {
-    container?: React.CSSProperties;
-    dayContainer?: React.CSSProperties;
-    dayButton?: React.CSSProperties;
-    selectedDayButton?: React.CSSProperties;
-    disabledDayButton?: React.CSSProperties;
-  };
-}
+import { CalendarViewStyleProps } from '../types';
+import { calendarView as defaultStyles } from '../default-styles';
 
 export default function CalendarView({
   classNames = {},
   styles = {},
-}: CalendarViewProps) {
+}: CalendarViewStyleProps) {
   const context = useDTPCxt();
   const daysInMonth = context.getDaysInMonth(context.dateTime);
   const firstDayOfMonth = context.startOfMonth(context.dateTime).getDay();
@@ -57,32 +19,45 @@ export default function CalendarView({
 
   return (
     <div
-      style={{ ...defaultStyles.calendarContainer, ...styles.container }}
+      style={{ ...defaultStyles.container, ...styles.container }}
       className={classNames.container}>
-      <DaysOfWeek days={daysOfWeek} />
-      <EmptyDays count={firstDayOfMonth} />
+      <DaysOfWeek
+        days={daysOfWeek}
+        classNames={classNames}
+        styles={styles}
+      />
+      <EmptyDays
+        count={firstDayOfMonth}
+        classNames={classNames}
+        styles={styles}
+      />
       <Days
         context={context}
         daysInMonth={daysInMonth}
         classNames={classNames}
         styles={styles}
       />
-      <EmptyDays count={numberOfEmptyDays} />
+      <EmptyDays
+        count={numberOfEmptyDays}
+        classNames={classNames}
+        styles={styles}
+      />
     </div>
   );
 }
 
-interface DaysOfWeekProps {
+interface DaysOfWeekProps extends CalendarViewStyleProps {
   days: string[];
 }
 
-function DaysOfWeek({ days }: DaysOfWeekProps) {
+function DaysOfWeek({ days, styles, classNames }: DaysOfWeekProps) {
   return (
     <>
       {days.map((d, index) => (
         <div
           key={index}
-          style={defaultStyles.dayContainer}>
+          style={{ ...defaultStyles.dayContainer, ...styles?.dayContainer }}
+          className={classNames?.dayContainer}>
           <p>{d}</p>
         </div>
       ))}
@@ -90,11 +65,11 @@ function DaysOfWeek({ days }: DaysOfWeekProps) {
   );
 }
 
-interface EmptyDaysProps {
+interface EmptyDaysProps extends CalendarViewStyleProps {
   count: number;
 }
 
-function EmptyDays({ count }: EmptyDaysProps) {
+function EmptyDays({ count, styles, classNames }: EmptyDaysProps) {
   const emptyDays = useMemo(() => Array.from({ length: count }), [count]);
 
   return (
@@ -102,18 +77,17 @@ function EmptyDays({ count }: EmptyDaysProps) {
       {emptyDays.map((_, index) => (
         <div
           key={index}
-          style={defaultStyles.dayContainer}
+          style={{ ...defaultStyles.dayContainer, ...styles?.dayContainer }}
+          className={classNames?.dayContainer}
         />
       ))}
     </>
   );
 }
 
-interface DaysProps {
+interface DaysProps extends CalendarViewStyleProps {
   daysInMonth: number;
   context: ReturnType<typeof useDTPCxt>;
-  classNames: CalendarViewProps['classNames'];
-  styles: CalendarViewProps['styles'];
 }
 
 function Days({ daysInMonth, context, classNames, styles }: DaysProps) {
