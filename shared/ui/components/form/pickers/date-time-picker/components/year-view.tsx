@@ -2,6 +2,26 @@ import { useDTPCxt } from '../dtp-context';
 import React, { useRef, useEffect } from 'react';
 import { ViewTypes } from '../types';
 
+const defaultStyles = {
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    width: '100%',
+    height: '100%',
+    overflowY: 'auto' as 'auto',
+  },
+  button: {
+    width: '100%',
+    textAlign: 'center' as 'center',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  selected: {
+    backgroundColor: '#3498db',
+  },
+};
+
 interface YearButtonProps {
   year: number;
   dateTime: Date;
@@ -39,34 +59,6 @@ interface YearViewProps {
     selected?: React.CSSProperties;
   };
 }
-
-const defaultStyles = {
-  container: {
-    display: 'grid',
-    gap: '3px',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    width: '100%',
-    height: '100%',
-    overflowY: 'auto' as 'auto',
-  },
-  button: {
-    width: '100%',
-    textAlign: 'center' as 'center',
-    border: '1px solid transparent',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s',
-    backgroundColor: 'transparent',
-    color: 'white',
-  },
-  disabled: {
-    opacity: 0.5,
-    cursor: 'not-allowed',
-  },
-  selected: {
-    backgroundColor: '#3498db',
-    color: 'white',
-  },
-};
 
 export default function YearView({ classNames, styles, buttonStyles }: YearViewProps) {
   const {

@@ -17,6 +17,7 @@ const defaultStyles = {
   button: {
     width: '100%',
     textAlign: 'center' as 'center',
+    margin: '10px 0',
   },
   selected: {
     backgroundColor: '#3498db',
@@ -86,8 +87,11 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewProps
 
   return (
     <div
-      style={{ ...defaultStyles.container, ...styles.container }}
-      className={classNames.container}>
+      style={{
+        ...defaultStyles.container,
+        ...styles?.container,
+      }}
+      className={classNames?.container || ''}>
       <TimeColumn
         values={HOURS}
         onClickValue={setHour}
@@ -97,8 +101,8 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewProps
         classNames={classNames}
       />
       <div
-        style={{ ...defaultStyles.divider, ...styles.divider }}
-        className={classNames.divider}
+        style={{ ...defaultStyles.divider, ...styles?.divider }}
+        className={classNames?.divider || ''}
       />
       <TimeColumn
         values={MINUTES}
@@ -124,7 +128,7 @@ const TimeColumn: React.FC<TimeColumnProps> = React.memo(
     return (
       <div
         style={{ ...defaultStyles.column, ...styles?.column }}
-        className={classNames?.column}>
+        className={classNames?.column || ''}>
         {values.map((value) => (
           <TimeButton
             key={value}
@@ -170,12 +174,13 @@ const TimeButton = React.forwardRef<HTMLButtonElement, TimeButtonProps>(
       <button
         ref={ref}
         type='button'
-        style={
-          isSelected
-            ? { ...defaultStyles.button, ...style, ...selectedStyle }
-            : { ...defaultStyles.button, ...style }
-        }
-        className={`${className} ${isSelected ? selectedClassName : ''}`}
+        style={{
+          ...defaultStyles.button,
+          ...(isSelected ? defaultStyles.selected : {}),
+          ...style,
+          ...(isSelected ? selectedStyle : {}),
+        }}
+        className={`${className || ''} ${isSelected ? selectedClassName || '' : ''}`}
         onClick={() => {
           if (!isSelected) {
             onClickValue(value);

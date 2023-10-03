@@ -1,31 +1,26 @@
 import { useDTPCxt } from '../dtp-context';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 const defaultStyles = {
   calendarContainer: {
     display: 'grid',
     gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: '1px',
+    gap: 10,
   },
   dayContainer: {
     width: '100%',
-    height: '40px',
     textAlign: 'center' as 'center',
+    marginBottom: 10,
   },
   dayButton: {
     width: '100%',
-    height: '40px',
     textAlign: 'center' as 'center',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s',
   },
   selectedDayButton: {
     backgroundColor: '#3498db',
   },
   disabledDayButton: {
     opacity: '0.5',
-    cursor: 'not-allowed',
   },
 };
 
