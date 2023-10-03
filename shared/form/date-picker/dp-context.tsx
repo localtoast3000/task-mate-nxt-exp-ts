@@ -19,14 +19,14 @@ import {
   isBefore,
   isAfter,
 } from 'date-fns';
-import { DateTimePickerProps, ViewTypes } from './types';
+import type { DatePickerProps, ViewTypes } from './types';
 
-interface DateTimePickerContextProps extends DateTimePickerProps {
-  dateTime: Date;
+interface DatePickerContextProps extends DatePickerProps {
+  date: Date;
   view: ViewTypes;
-  setDateTime: (newDateTime: Date) => void;
+  setDate: (newDate: Date) => void;
   setView: (view: ViewTypes) => void;
-  updateDateTime: (
+  updateDate: (
     modifier: 'add' | 'sub',
     options: {
       day?: number;
@@ -49,24 +49,25 @@ interface DateTimePickerContextProps extends DateTimePickerProps {
   adjustDate: (date: Date) => Date;
 }
 
-const DateTimeContext = createContext<DateTimePickerContextProps | undefined>(undefined);
+const DatePickerContext = createContext<DatePickerContextProps | undefined>(undefined);
 
-export function DateTimePickerContextProvider({
+export function DatePickerContextProvider({
   children,
   initialDate = new Date(),
   onChange = () => {},
+  views = ['calendar', 'year', 'time'],
   ...props
-}: DateTimePickerProps) {
-  const [dateTime, setDateTime] = useState(initialDate);
+}: DatePickerProps) {
+  const [date, setDate] = useState(initialDate);
   const [view, setView] = useState<ViewTypes>('calendar');
 
   useEffect(() => {
-    onChange(dateTime);
-  }, [dateTime]);
+    onChange(date);
+  }, [date]);
 
-  const updateDateTime = useCallback(
+  const updateDate = useCallback(
     (modifier: 'add' | 'sub', options: any) => {
-      let newDate = dateTime;
+      let newDate = date;
       const operations = {
         day: addDays,
         month: addMonths,
@@ -86,9 +87,9 @@ export function DateTimePickerContextProvider({
         }
       }
 
-      setDateTime(newDate);
+      setDate(newDate);
     },
-    [dateTime]
+    [date]
   );
 
   const todaysDate = useCallback(() => {
@@ -118,11 +119,12 @@ export function DateTimePickerContextProvider({
 
   const contextValue = useMemo(
     () => ({
-      dateTime,
+      date,
+      views,
       view,
-      setDateTime,
+      setDate,
       setView,
-      updateDateTime,
+      updateDate,
       todaysDate,
       format,
       startOfMonth,
@@ -135,17 +137,19 @@ export function DateTimePickerContextProvider({
       adjustDate,
       ...props,
     }),
-    [dateTime, view, updateDateTime, todaysDate, props]
+    [date, view, updateDate, todaysDate, props]
   );
 
   return (
-    <DateTimeContext.Provider value={contextValue}>{children}</DateTimeContext.Provider>
+    <DatePickerContext.Provider value={contextValue}>
+      {children}
+    </DatePickerContext.Provider>
   );
 }
 
-export function useDTPCxt() {
-  const context = useContext(DateTimeContext);
+export function useDPCxt(): DatePickerContextProps {
+  const context = useContext(DatePickerContext);
   if (context === undefined)
-    throw new Error('useDateTime must be used within a DateTimeProvider');
+    throw new Error('useDate must be used within a DatePickerContextProvider');
   return context;
 }

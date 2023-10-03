@@ -1,7 +1,7 @@
 import { Task } from '@/types/tasks';
 import { useTasks } from '@/context/tasks';
-import { Form, DateTimeInput } from 'shared.ui/components/form/exports';
-import { useRef } from 'react';
+import { Form, DateInput } from 'shared.form/exports';
+import { useRef, useState } from 'react';
 import { format, addYears } from 'date-fns';
 
 interface TaskCardProps extends Task {}
@@ -65,6 +65,9 @@ function EditTaskModal({
   id: string;
   getRef: (ref: any) => HTMLDivElement | null;
 }) {
+  const { editTask, tasks } = useTasks();
+  const [trackedDate, setTracedDate] = useState(new Date());
+
   return (
     <dialog
       ref={(ref) => getRef(ref)}
@@ -80,18 +83,20 @@ function EditTaskModal({
           defaultValues={{
             'task-end-date': new Date(),
           }}
-          onSubmit={({ values }: any) => {
-            console.log(values);
-          }}>
-          <DateTimeInput
+          onSubmit={({ values }: any) => {}}>
+          <DateInput
             name='task-end-date'
+            initialDate={trackedDate}
+            onValueChange={(date) => setTracedDate(date)}
             controlled
             picker
+            dateFormat='dd/MM/yyy HH:mm'
             pickerProps={{
               yearRange: [
                 new Date().getFullYear(),
                 addYears(new Date(), 27).getFullYear(),
               ],
+              views: ['calendar', 'year'],
               disablePastDates: true,
               startWeekOnMonday: true,
               maxDate: addYears(new Date(), 10),

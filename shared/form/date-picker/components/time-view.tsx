@@ -1,4 +1,4 @@
-import { useDTPCxt } from '../dtp-context';
+import { useDPCxt } from '../dp-context';
 import React, { useCallback, useRef, useEffect } from 'react';
 import { TimeViewStyleProps } from '../types';
 import { timeView as defaultStyles } from '../default-styles';
@@ -7,7 +7,7 @@ const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = Array.from({ length: 60 }, (_, i) => i);
 
 export default function TimeView({ classNames = {}, styles = {} }: TimeViewStyleProps) {
-  const { dateTime, setDateTime, setView } = useDTPCxt();
+  const { date, setDate, setView } = useDPCxt();
 
   const hourRef = useRef<HTMLButtonElement | null>(null);
   const minuteRef = useRef<HTMLButtonElement | null>(null);
@@ -27,21 +27,21 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewStyle
 
   const setHour = useCallback(
     (hour: number) => {
-      const newDate = new Date(dateTime);
+      const newDate = new Date(date);
       newDate.setHours(hour);
-      setDateTime(newDate);
+      setDate(newDate);
     },
-    [dateTime, setDateTime]
+    [date, setDate]
   );
 
   const setMinute = useCallback(
     (minute: number) => {
-      const newDate = new Date(dateTime);
+      const newDate = new Date(date);
       newDate.setMinutes(minute);
-      setDateTime(newDate);
+      setDate(newDate);
       setView('calendar');
     },
-    [dateTime, setDateTime, setView]
+    [date, setDate, setView]
   );
 
   return (
@@ -54,7 +54,7 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewStyle
       <TimeColumn
         values={HOURS}
         onClickValue={setHour}
-        selectedValue={dateTime.getHours()}
+        selectedValue={date.getHours()}
         refValue={hourRef}
         styles={styles}
         classNames={classNames}
@@ -66,7 +66,7 @@ export default function TimeView({ classNames = {}, styles = {} }: TimeViewStyle
       <TimeColumn
         values={MINUTES}
         onClickValue={setMinute}
-        selectedValue={dateTime.getMinutes()}
+        selectedValue={date.getMinutes()}
         refValue={minuteRef}
         styles={styles}
         classNames={classNames}

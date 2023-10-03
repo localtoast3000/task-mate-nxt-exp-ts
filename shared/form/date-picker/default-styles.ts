@@ -1,6 +1,6 @@
 const selected = '#3498db';
 
-export const dateTimePicker = {
+export const datePicker = {
   container: {
     position: 'absolute' as 'absolute',
     zIndex: 10,

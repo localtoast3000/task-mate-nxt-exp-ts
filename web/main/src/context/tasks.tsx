@@ -62,5 +62,5 @@ export function useTasks() {
   const context = useContext(TasksContext);
   if (context === undefined)
     throw new Error('useTasks must be used within a TasksContextProvider');
-  return context;
+  return context as TasksContextProps;
 }

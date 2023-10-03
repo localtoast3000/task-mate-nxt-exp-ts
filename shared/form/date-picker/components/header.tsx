@@ -1,10 +1,51 @@
-import { useDTPCxt } from '../dtp-context';
+import { useDPCxt } from '../dp-context';
 import { ViewTypes, HeaderStyleProps } from '../types';
 import React from 'react';
 import { header as defaultStyles } from '../default-styles';
 
 export default function Header({ classNames = {}, styles = {} }: HeaderStyleProps) {
-  const context = useDTPCxt();
+  const context = useDPCxt();
+
+  const headerComponents = [
+    {
+      Component: YearButton,
+      props: {
+        view: context.view,
+        date: context.date,
+        setView: context.setView,
+      } as YearButtonProps,
+    },
+    {
+      Component: TimeButton,
+      props: {
+        date: context.date,
+        view: context.view,
+        setView: context.setView,
+        format: context.format,
+      } as TimeButtonProps,
+    },
+    {
+      Component: MonthButton,
+      props: {
+        view: context.view,
+        date: context.date,
+        setView: context.setView,
+        format: context.format,
+      } as MonthButtonProps,
+    },
+    {
+      Component: CalendarNavButtons,
+      props: {
+        date: context.date,
+        minDate: context.minDate,
+        maxDate: context.maxDate,
+        conditions: context.conditions,
+        view: context.view,
+        todaysDate: context.todaysDate,
+        updateDate: context.updateDate,
+      } as CalendarNavButtonProps,
+    },
+  ];
 
   return (
     <div
@@ -13,46 +54,26 @@ export default function Header({ classNames = {}, styles = {} }: HeaderStyleProp
         ...styles?.container,
       }}
       className={classNames?.container || ''}>
-      <YearButton
-        view={context.view}
-        dateTime={context.dateTime}
-        setView={context.setView}
-        classNames={classNames}
-        styles={styles}
-      />
-      <TimeButton
-        dateTime={context.dateTime}
-        view={context.view}
-        setView={context.setView}
-        format={context.format}
-        classNames={classNames}
-        styles={styles}
-      />
-      <MonthButton
-        view={context.view}
-        dateTime={context.dateTime}
-        setView={context.setView}
-        format={context.format}
-        classNames={classNames}
-        styles={styles}
-      />
-      <CalendarNavButtons
-        {...context}
-        classNames={classNames}
-        styles={styles}
-      />
+      {headerComponents.map(({ Component, props }, index) => (
+        <Component
+          key={index}
+          {...(props as any)}
+          classNames={classNames}
+          styles={styles}
+        />
+      ))}
     </div>
   );
 }
 
 interface YearButtonProps extends HeaderStyleProps {
-  dateTime: Date;
+  date: Date;
   view: ViewTypes;
   setView: (view: ViewTypes) => void;
 }
 
 const YearButton: React.FC<YearButtonProps> = ({
-  dateTime,
+  date,
   setView,
   view,
   classNames,
@@ -75,20 +96,20 @@ const YearButton: React.FC<YearButtonProps> = ({
         view === 'year' ? classNames?.viewButtonActive || '' : ''
       } ${view === 'year' ? classNames?.yearButtonActive || '' : ''}`}
       onClick={() => setView('year')}>
-      <span>{dateTime.getFullYear()}</span>
+      <span>{date.getFullYear()}</span>
     </button>
   );
 };
 
 interface TimeButtonProps extends HeaderStyleProps {
-  dateTime: Date;
+  date: Date;
   view: ViewTypes;
   setView: (view: ViewTypes) => void;
   format: (date: Date, format: string, options?: {}) => string;
 }
 
 const TimeButton: React.FC<TimeButtonProps> = ({
-  dateTime,
+  date,
   view,
   setView,
   format,
@@ -116,20 +137,20 @@ const TimeButton: React.FC<TimeButtonProps> = ({
         view === 'calendar' ? '' : classNames?.timeButtonSpan
       }`}
       onClick={() => setView('time')}>
-      {format(dateTime, 'HH:mm')}
+      {format(date, 'HH:mm')}
     </button>
   );
 };
 
 interface MonthButtonProps extends HeaderStyleProps {
-  dateTime: Date;
+  date: Date;
   view: ViewTypes;
   setView: (view: ViewTypes) => void;
   format: (date: Date, format: string, options?: {}) => string;
 }
 
 const MonthButton: React.FC<MonthButtonProps> = ({
-  dateTime,
+  date,
   setView,
   format,
   view,
@@ -153,13 +174,13 @@ const MonthButton: React.FC<MonthButtonProps> = ({
         view === 'calendar' ? classNames?.viewButtonActive || '' : ''
       } ${view === 'calendar' ? classNames?.monthButtonActive || '' : ''}`}
       onClick={() => setView('calendar')}>
-      <span>{format(dateTime, 'MMMM')}</span>
+      <span>{format(date, 'MMMM')}</span>
     </button>
   );
 };
 
 interface CalendarNavButtonProps extends HeaderStyleProps {
-  dateTime: Date;
+  date: Date;
   minDate?: Date;
   maxDate?: Date;
   conditions: {
@@ -168,7 +189,7 @@ interface CalendarNavButtonProps extends HeaderStyleProps {
   };
   view: ViewTypes;
   todaysDate: () => Date;
-  updateDateTime: (
+  updateDate: (
     modifier: 'add' | 'sub',
     options: {
       month?: number;
@@ -177,18 +198,18 @@ interface CalendarNavButtonProps extends HeaderStyleProps {
 }
 
 const CalendarNavButtons: React.FC<CalendarNavButtonProps> = ({
-  dateTime,
+  date,
   minDate,
   maxDate,
   conditions,
   view,
   todaysDate,
-  updateDateTime,
+  updateDate,
   classNames,
   styles,
 }) => {
-  const previousMonth = new Date(dateTime.getFullYear(), dateTime.getMonth() - 1, 1);
-  const nextMonth = new Date(dateTime.getFullYear(), dateTime.getMonth() + 1, 1);
+  const previousMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+  const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
   const currentMonth = new Date(todaysDate().getFullYear(), todaysDate().getMonth(), 1);
 
   const disablePrev =
@@ -210,14 +231,14 @@ const CalendarNavButtons: React.FC<CalendarNavButtonProps> = ({
       }`}>
       <CalendarNavButton
         disabled={disablePrev}
-        onClick={() => !disablePrev && updateDateTime('sub', { month: 1 })}
+        onClick={() => !disablePrev && updateDate('sub', { month: 1 })}
         points='10,0 0,5 10,10'
         classNames={classNames}
         styles={styles}
       />
       <CalendarNavButton
         disabled={disableNext}
-        onClick={() => !disableNext && updateDateTime('add', { month: 1 })}
+        onClick={() => !disableNext && updateDate('add', { month: 1 })}
         points='0,0 10,5 0,10'
         classNames={classNames}
         styles={styles}

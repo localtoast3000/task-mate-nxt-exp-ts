@@ -2,7 +2,8 @@ import { ReactNode, CSSProperties } from 'react';
 
 export type ViewTypes = 'calendar' | 'year' | 'time';
 
-export interface DateTimePickerProps {
+export interface DatePickerProps {
+  views: ViewTypes[];
   initialDate?: Date;
   disablePastDates: boolean;
   startWeekOnMonday: boolean;
@@ -13,7 +14,7 @@ export interface DateTimePickerProps {
   children?: ReactNode;
 }
 
-export interface DateTimePickerStyleProps {
+export interface DatePickerStyleProps {
   styles?: {
     container?: CSSProperties;
     viewContainer?: CSSProperties;

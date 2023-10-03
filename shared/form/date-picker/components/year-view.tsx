@@ -1,12 +1,12 @@
-import { useDTPCxt } from '../dtp-context';
+import { useDPCxt } from '../dp-context';
 import React, { useRef, useEffect } from 'react';
 import { ViewTypes, YearViewStyleProps } from '../types';
 import { yearView as defaultStyles } from '../default-styles';
 
 interface YearViewProps extends YearViewStyleProps {
   year: number;
-  dateTime: Date;
-  setDateTime: (date: Date) => void;
+  date: Date;
+  setDate: (date: Date) => void;
   setView: (view: ViewTypes) => void;
   adjustDate: (date: Date) => Date;
   minDate?: Date;
@@ -16,15 +16,15 @@ interface YearViewProps extends YearViewStyleProps {
 
 export default function YearView({ classNames, styles }: YearViewStyleProps) {
   const {
-    dateTime,
+    date,
     yearRange,
     setView,
-    setDateTime,
+    setDate,
     adjustDate,
     minDate,
     maxDate,
     disablePastDates,
-  } = useDTPCxt();
+  } = useDPCxt();
   const displayedYears = generateYearRange(yearRange[0], yearRange[1]);
   const selectedYearRef = useRef<HTMLButtonElement | null>(null);
 
@@ -44,8 +44,8 @@ export default function YearView({ classNames, styles }: YearViewStyleProps) {
         <YearButton
           key={year}
           year={year}
-          dateTime={dateTime}
-          setDateTime={setDateTime}
+          date={date}
+          setDate={setDate}
           setView={setView}
           adjustDate={adjustDate}
           minDate={minDate}
@@ -53,7 +53,7 @@ export default function YearView({ classNames, styles }: YearViewStyleProps) {
           disablePastDates={disablePastDates}
           classNames={classNames}
           styles={styles}
-          ref={year === dateTime.getFullYear() ? selectedYearRef : null}
+          ref={year === date.getFullYear() ? selectedYearRef : null}
         />
       ))}
     </div>
@@ -63,8 +63,8 @@ export default function YearView({ classNames, styles }: YearViewStyleProps) {
 const YearButton = React.forwardRef<HTMLButtonElement, YearViewProps>(function YearButton(
   {
     year,
-    dateTime,
-    setDateTime,
+    date,
+    setDate,
     setView,
     adjustDate,
     minDate,
@@ -75,7 +75,7 @@ const YearButton = React.forwardRef<HTMLButtonElement, YearViewProps>(function Y
   },
   ref
 ) {
-  const isSelected = dateTime.getFullYear() === year;
+  const isSelected = date.getFullYear() === year;
   const isDisabled =
     (disablePastDates && year < (minDate?.getFullYear() || 0)) ||
     year > (maxDate?.getFullYear() || Infinity);
@@ -99,10 +99,10 @@ const YearButton = React.forwardRef<HTMLButtonElement, YearViewProps>(function Y
       type='button'
       onClick={() => {
         if (!isSelected && !isDisabled) {
-          const newDate = new Date(dateTime);
+          const newDate = new Date(date);
           newDate.setFullYear(year);
           const adjustedDate = adjustDate(newDate);
-          setDateTime(adjustedDate);
+          setDate(adjustedDate);
           setView('calendar');
         }
       }}>

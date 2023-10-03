@@ -1,4 +1,4 @@
-import { useDTPCxt } from '../dtp-context';
+import { useDPCxt } from '../dp-context';
 import React, { useMemo } from 'react';
 import { CalendarViewStyleProps } from '../types';
 import { calendarView as defaultStyles } from '../default-styles';
@@ -7,9 +7,9 @@ export default function CalendarView({
   classNames = {},
   styles = {},
 }: CalendarViewStyleProps) {
-  const context = useDTPCxt();
-  const daysInMonth = context.getDaysInMonth(context.dateTime);
-  const firstDayOfMonth = context.startOfMonth(context.dateTime).getDay();
+  const context = useDPCxt();
+  const daysInMonth = context.getDaysInMonth(context.date);
+  const firstDayOfMonth = context.startOfMonth(context.date).getDay();
   const totalDays = 42; // 6 weeks * 7 days
   const numberOfEmptyDays = totalDays - daysInMonth - firstDayOfMonth;
 
@@ -87,7 +87,7 @@ function EmptyDays({ count, styles, classNames }: EmptyDaysProps) {
 
 interface DaysProps extends CalendarViewStyleProps {
   daysInMonth: number;
-  context: ReturnType<typeof useDTPCxt>;
+  context: ReturnType<typeof useDPCxt>;
 }
 
 function Days({ daysInMonth, context, classNames, styles }: DaysProps) {
@@ -98,13 +98,13 @@ function Days({ daysInMonth, context, classNames, styles }: DaysProps) {
       {days.map((_, dayIndex) => {
         const day = dayIndex + 1;
         const thisDay = new Date(
-          context.dateTime.getFullYear(),
-          context.dateTime.getMonth(),
+          context.date.getFullYear(),
+          context.date.getMonth(),
           day,
-          context.dateTime.getHours(),
-          context.dateTime.getMinutes(),
-          context.dateTime.getSeconds(),
-          context.dateTime.getMilliseconds()
+          context.date.getHours(),
+          context.date.getMinutes(),
+          context.date.getSeconds(),
+          context.date.getMilliseconds()
         );
         const isBeforeToday =
           context.disablePastDates &&
@@ -114,7 +114,7 @@ function Days({ daysInMonth, context, classNames, styles }: DaysProps) {
         const isAfterMax =
           context.maxDate && context.conditions.isAfter(thisDay, context.maxDate);
         const isDisabled = isBeforeToday || isBeforeMin || isAfterMax;
-        const isSelected = thisDay.getTime() === context.dateTime.getTime();
+        const isSelected = thisDay.getTime() === context.date.getTime();
 
         return (
           <button
@@ -137,7 +137,7 @@ function Days({ daysInMonth, context, classNames, styles }: DaysProps) {
             }`}
             onClick={() => {
               if (!isDisabled && !isSelected) {
-                context.setDateTime(thisDay);
+                context.setDate(thisDay);
                 context.setView('time');
               }
             }}>
